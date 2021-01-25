@@ -1,0 +1,18 @@
+.sidebar-brand-icon img{
+    width: 60px;
+}
+.bg-login img{
+    width: 100%;
+    height:100%;
+    object-fit: contain;
+}
+
+.docFormDiv {
+    display: none;
+}
+
+.sidebar-brand-icons img{
+    width: 100%;
+    height:100%;
+    object-fit: contain;
+}

@@ -1,0 +1,82 @@
+.coOrange{
+    color: #f58634;
+}
+.coGrey{
+    color: #96989a;
+}
+.border-1-coOrange {
+    border: 1px solid #f58634 !important;
+}
+.bg-coGrey{
+    background-color:  #96989a;
+}
+.contactFormDiv {
+    display: none;
+}
+.bg-black {
+    background-color: #000000;
+}
+.font08 {
+    font-size: 0.8rem;
+}
+.findClientsDiv{
+    height: 270px;
+    color: #ffffff;
+    box-shadow: 4px 4px lightgrey;
+}
+.text-center {
+    text-align: center !important;
+}
+.pt-3{
+    padding-top: 3px;
+}
+.pb-3{
+    padding-bottom: 3px;
+}
+.invoicesDiv{
+    display: none;
+}
+.inlineLabel label{
+    justify-content: left;
+}
+.pageTitle {
+    color: #f58634;
+    margin: 0;
+    font-weight: bold;
+}
+.breadCrumb {
+    font-size: 0.9rem;
+    font-style: italic;
+}
+.coLookUp{
+    display: none;
+}
+.coSelect{
+    display: none;
+}
+
+.coNameDiv{
+    display: none;
+}
+.postalAddressDiv{
+    display: none;
+}
+.skypeLogo img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.btn{
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.table td{
+    padding: 0.35rem;
+}
+
+.table th{
+    padding: 0.35rem;
+    background-color: #000000;
+    color: #f58634;
+}
+

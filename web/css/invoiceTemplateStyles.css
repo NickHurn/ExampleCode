@@ -1,0 +1,28 @@
+.width70pc{
+    width: 70%;
+}
+.width30pc{
+    width: 30%;
+}
+.width50pc{
+    width: 50%;
+}
+.width100pc{
+    width: 100%;
+}
+.tdBorder {
+    border: 1px lightgrey solid;
+    padding:0 10px;
+
+}
+table {
+    border-spacing: 0px;
+}
+.invTableTr {
+    line-height: 30px;
+    height: 30px;
+}
+
+.text-right {
+    text-align: right !important;
+}

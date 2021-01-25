@@ -1,0 +1,107 @@
+{% if is_granted('ROLE_ADMIN')%}
+    {% set base = 'baseAdmin.html.twig' %}
+{% elseif is_granted('ROLE_CLIENT')%}
+    {% set base = 'baseClient.html.twig' %}
+{% endif %}
+{% extends base %}
+{% block body %}
+    <div class="container-fluid">
+        {% if is_granted('ROLE_ADMIN')%}
+            <span class="font08 font-italic">clients / <a href="{{ path('find_clients') }}">find clients</a> / {{ client.displayName|lower }} / {{ title|lower }}</span>
+        {% elseif is_granted('ROLE_CLIENT')%}
+            <span class="font08 font-italic"> {{ title|lower }} </span>
+        {% endif %}
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+            <div class="row">
+                <div class="col-6">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ client.displayName }}</h6>
+                </div>
+                 <div class="col-6 text-right">
+                    <span class="m-0 font-weight-bold text-primary">Client ID:</span> {{ client.id }}
+                </div>
+
+            </div>
+            </div>
+            <div class="card-body">
+                <div class="col-md-12 col-12 pb-4 pl-3">
+                    {% block clientSubMenu %}
+                        {% include 'client/clientSubMenu.html.twig' %}
+                    {% endblock %}
+                </div>
+                <div class="col-md-12 pb-0">
+                    <div class="col-12 pt-1 addDocOption"><a href="{{ path('client_new_invoices',{'guid':client.guid}) }}" class="fa fa-plus-square text-primary" > Add Invoice</a> </div>
+                </div>
+                <div class="col-md-12 col-12 pb-4 pl-3  ">
+                 {% if errorMessage %}
+                    <div class="col-md-12 col-12 pb-4 pl-3 pt-4 bg-warning text-white rounded">
+                        <ul>
+                            {% for em in errorMessage %}
+                                <li>{{ em }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                 {% if message %}
+                     <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-info text-white rounded">
+                         <span>{{ message }}</span>
+                     </div>
+                 {% endif %}
+                </div>
+                <!-- INVOICES -->
+                <div class="col-md-12 col-12  clientSection" id="invoices">
+                    <div class="col-md-12 offset-md-1  col-12 border-1-coOrange p-4 rounded m-1">
+                        <div class="row pt-1 pb-3">
+                            <div class="col-11 ">
+                                <h5 class="font-weight-bolder">Invoices</h5>
+                            </div>
+                            <div class="col-1 text-right">
+
+                            </div>
+                        </div>
+                        <div class="table-responsive docTableDiv">
+
+                            <table class="table table-bordered" id="dataTable"  cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>Invoice No'</th>
+                                    <th>Invoice Date</th>
+                                    <th>Amount</th>
+                                    <th>paid</th>
+                                    <th>&nbsp;&nbsp;</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for c in invoices %}
+                                    <tr>
+                                        <td>{{ c.id }}</td>
+                                        <td>{{ c.dateCreated|date('d-m-Y') }}</td>
+                                        <td>£ {{ c.totalPayable }}</td>
+                                        <td class="">{% if c.paid %} <span class="fa fa-check-circle fa-align-center text-success"></span> {% else %} <span class="fa fa-times-circle text-danger"></span> {% endif %}</td>
+                                        <td>
+                                            <a href="{{ docPath }}invoice-{{ c.id }}.pdf" target="_blank"><span class="pl-2 fa fa-file coOrange"></span></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- END OF INVOICES -->
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block pageJavascripts %}
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
+    <script>
+
+
+    </script>
+
+
+{% endblock %}

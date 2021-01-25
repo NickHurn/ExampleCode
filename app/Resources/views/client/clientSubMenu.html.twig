@@ -1,0 +1,18 @@
+{% block clientSubMenu %}
+    <div class="row">
+        <div class="col-9">
+        <a href="{{ path('client',{'guid':client.guid}) }}" class="border-1-coOrange rounded {% if section == 'client' %} bg-coGrey text-white {% else %} bg-white coOrange {% endif %} font-weight-bolder p-2 mr-2 clientMenuBtn">Client Details</a>
+        <a href="{{ path('client_contacts',{'guid':client.guid}) }}" class="border-1-coOrange rounded {% if section == 'contacts' %} bg-coGrey text-white {% else %} bg-white coOrange {% endif %} font-weight-bolder p-2 mr-2 clientMenuBtn">Contact</a>
+        <a href="{{ path('client_documents',{'guid':client.guid}) }}" class="border-1-coOrange rounded {% if section == 'docs' %} bg-coGrey text-white {% else %} bg-white coOrange {% endif %} font-weight-bolder p-2 mr-2 clientMenuBtn">Documents</a>
+        <a href="{{ path('client_officers', {'guid':client.guid}) }}" class=" border-1-coOrange rounded {% if section == 'officers' %}   bg-coGrey text-white {% else %} bg-white coOrange {% endif %} font-weight-bolder p-2 mr-2 clientMenuBtn">Company Officers</a>
+        <a href="{{ path('client_invoices',{'guid':client.guid}) }}" class="border-1-coOrange rounded {% if section == 'invoices' %} bg-coGrey text-white {% else %} bg-white coOrange {% endif %} font-weight-bolder p-2 mr-2 clientMenuBtn">Invoices</a>
+        <a href="{{ path('client_account',{'guid':client.guid}) }}" class="border-1-coOrange rounded {% if section == 'account' %} bg-coGrey text-white {% else %} bg-white coOrange {% endif %} font-weight-bolder p-2 mr-2 clientMenuBtn">Account</a>
+        </div>
+        <div class="col-3 text-right">
+            {% if client.companyHouse %}
+                <button class="btn btn-primary text-white refreshCoData" data-id="{{client.companyHouse.companyNumber }}">Refresh Company Data</button>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

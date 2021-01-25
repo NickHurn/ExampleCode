@@ -1,0 +1,180 @@
+{% if is_granted('ROLE_ADMIN')%}
+    {% set base = 'baseAdmin.html.twig' %}
+{% elseif is_granted('ROLE_CLIENT')%}
+    {% set base = 'baseClient.html.twig' %}
+{% endif %}
+{% extends base %}
+{% block body %}
+    <div class="container-fluid">
+        {% if is_granted('ROLE_ADMIN')%}
+            <span class="breadCrumb">clients / <a href="{{ path('find_clients') }}">find clients</a> / {{ client.displayName|lower }} / {{ title|lower }}</span>
+        {% elseif is_granted('ROLE_CLIENT')%}
+            <span class="breadCrumb">{{ title|lower }} </span>
+        {% endif %}
+
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+            <div class="row">
+                <div class="col-6">
+                    <h5 class="pageTitle">{{ client.displayName }}</h5>
+                </div>
+                 <div class="col-6 text-right">
+                    <span class="m-0 font-weight-bold text-primary">Client ID:</span> {{ client.id }}
+                </div>
+            </div>
+            </div>
+            <div class="card-body">
+                {% if is_granted('ROLE_ADMIN')%}
+                    <div class="col-md-12 col-12 pb-4 pl-3">
+                        {% block clientSubMenu %}
+                            {% include 'client/clientSubMenu.html.twig' %}
+                        {% endblock %}
+                    </div>
+                {% endif %}
+
+                <div class="col-md-12 pb-0">
+                    <div class="col-12 pt-1 addDocOption"><a href="#" class="fa fa-plus-square text-primary" > Add Document</a> </div>
+                </div>
+                 <div class="col-md-12 col-12 pb-4 pl-3  ">
+                     {% if errorMessage %}
+                        <div class="col-md-12 col-12 pb-4 pl-3 pt-4 bg-warning text-black-50 rounded">
+                            <ul>
+                                {% for em in errorMessage %}
+                                    <li>{{ em }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                     {% if message %}
+                         <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-info text-white rounded">
+                             <span>{{ message }}</span>
+                         </div>
+                     {% endif %}
+                 </div>
+
+                <!-- DOCUMENTS -->
+                <div class="col-md-12 col-12  clientSection" id="documents">
+                    <div class="col-md-12 offset-md-1  col-12 border-1-coOrange p-4 rounded m-1">
+                        <h5 class="font-weight-bolder">Documents</h5>
+                        <div class="table-responsive docTableDiv">
+
+                            <div class="pt-1 pb-3 docFormDiv border-1-coOrange rounded p-4 mb-2">
+                                {{ form_start(clientDocForm, {attr: { 'class':' ' } } ) }}
+                                    {{ form_widget(clientDocForm.id) }}
+
+                                    <div class="row pb-1 pb-1">
+                                        <div class="col-md-12 ">
+                                            {{ form_label(clientDocForm.documentName) }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            <span class="text-danger">{{ form_errors(clientDocForm.documentName) }}</span>
+                                            {{ form_widget(clientDocForm.documentName) }}
+                                        </div>
+                                    </div>
+                                <div class="row pb-1 pb-1">
+                                    <div class="col-md-12 ">
+                                        {{ form_label(clientDocForm.document) }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <span class="text-danger">{{ form_errors(clientDocForm.document) }}</span>
+                                        {{ form_widget(clientDocForm.document) }}
+                                    </div>
+                                </div>
+                                    <div class="row pb-1 pt-1">
+                                        <div class="col-md-12 ">
+                                            {{ form_label(clientDocForm.description) }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            <span class="text-danger">{{ form_errors(clientDocForm.description) }}</span>
+                                            {{ form_widget(clientDocForm.description) }}
+                                        </div>
+                                    </div>
+                                    <div class="row pt-5">
+                                        <div class="col-md-4 ">
+                                            {{ form_row(clientDocForm.submit) }}
+                                        </div>
+                                    </div>
+                                {{ form_end(clientDocForm, {'render_rest': false}) }}
+                            </div>
+                            <table class="table table-bordered" id="dataTable"  cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>Document Name</th>
+                                    <th>Version</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Document Type</th>
+                                    <th>&nbsp;&nbsp;</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for c in client.documents %}
+                                    {% if c.deleted == false %}
+                                        <tr>
+                                            <td>{{ c.documentName }}</td>
+
+                                            <td>{{ c.version }}</td>
+                                            <td>{{ c.dateCreated|date('d-m-Y') }}</td>
+                                            <td>{{ c.mimeType }}</td>
+                                            <td>{{ c.documentType }}</td>
+                                            <td>
+
+
+                                                <div class="dropdown no-arrow viewOption">
+                                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v fa-sm fa-fw coOrange"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right  shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                                        <!-- all users -->
+                                                        <a class="dropdown-item " href="{{ docPath }}{{ c.document }}" target="_blank"><span class="fa fa-eye coOrange"></span> View</a>
+
+                                                        {% if is_granted('ROLE_ADMIN')%} <!-- admin only -->
+                                                            <a href='#' class="dropdown-item deleteDoc" data-id="{{ c.id }}"><span class="fa fa-trash coOrange"></span> Remove</a>
+                                                        {% elseif is_granted('ROLE_CLIENT')%}<!-- clients only -->
+
+                                                        {% endif %}
+
+                                                    </div>
+
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- END OF DOCUMENTS -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block pageJavascripts %}
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
+    <script>
+        $('.addDocOption').click(function () {
+            $('.docFormDiv').delay( 400 ).slideToggle();
+        });
+        $('.deleteDoc').click(function () {
+            let answer = window.confirm("Are you sure you wish to delete this document?");
+            if (answer) {
+                let request = $.ajax({
+                    url: '/deleteDocument',
+                    type: 'get',
+                    data: {id: $(this).data('id')}
+                });
+                request.done(function (data) {
+                    if (data.status == 'ok'){
+                        location.reload();
+                    }
+                    if (data.status == 'error'){
+                        alert(data.error);
+                    }
+                });
+            }
+        });
+    </script>
+
+{% endblock %}

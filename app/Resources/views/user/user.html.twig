@@ -1,0 +1,56 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <span class="font08 font-italic">Users / <a href="{{ path('find_users') }}">Find Users</a> / {{ user.firstname }} {{ user.surname }}</span>
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{ user.firstname|upper }} {{ user.surname|upper }}</h6>
+            </div>
+            <div class="card-body">
+                <div class="col-md-6 offset-md-3 col-12">
+                    {{ form_start(form, {attr: { 'class':' ' } } ) }}
+                        <div class="row pb1 pb1">
+                            <div class="col-md-12 textAlignLeft">
+                                {{ form_label(form.firstname) }}
+                            </div>
+                            <div class="col-md-12">
+                                {{ form_widget(form.firstname) }}
+                            </div>
+                        </div>
+                        <div class="row pb1 pt1">
+                            <div class="col-md-12 textAlignLeft">
+                                {{ form_label(form.surname) }}
+                            </div>
+                            <div class="col-md-12">
+                                {{ form_widget(form.surname) }}
+                            </div>
+                        </div>
+                        <div class="row pb1 pt1">
+                            <div class="col-md-12 textAlignLeft">
+                                {{ form_label(form.username) }}
+                            </div>
+                            <div class="col-md-12">
+                                {{ form_widget(form.username) }}
+                            </div>
+                        </div>
+                        <div class="row pt-5">
+                            <div class="col-md-6 textAlignLeft">
+                                {{ form_row(form.save) }}
+                            </div>
+                            <div class="col-md-6 textAlignLeft">
+                                {{ form_row(form.remove) }}
+                            </div>
+                        </div>
+
+                    {{ form_end(form, {'render_rest': false}) }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block pageJavascripts %}
+
+{% endblock %}
+
+

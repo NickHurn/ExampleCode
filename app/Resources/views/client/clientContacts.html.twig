@@ -1,0 +1,199 @@
+{% if is_granted('ROLE_ADMIN')%}
+    {% set base = 'baseAdmin.html.twig' %}
+{% elseif is_granted('ROLE_CLIENT')%}
+    {% set base = 'baseClient.html.twig' %}
+{% endif %}
+{% extends base %}
+{% block body %}
+    <div class="container-fluid">
+        {% if is_granted('ROLE_ADMIN')%}
+            <span class="font08 font-italic">clients / <a href="{{ path('find_clients') }}">find clients</a> / {{ client.displayName|lower }} / {{ title|lower }}</span>
+        {% elseif is_granted('ROLE_CLIENT')%}
+            <span class="font08 font-italic">{{ title|lower }} </span>
+        {% endif %}
+
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+            <div class="row">
+                <div class="col-6">
+                    <h5 class="m-0 font-weight-bold text-primary">{{ client.displayName }}</h5>
+                </div>
+                 <div class="col-6 text-right">
+                    <span class="m-0 font-weight-bold text-primary">Client ID:</span> {{ client.id }}
+                </div>
+
+            </div>
+            </div>
+            <div class="card-body">
+                {% if is_granted('ROLE_ADMIN')%}
+                    <div class="col-md-12 col-12 pb-4 pl-3">
+                        {% block clientSubMenu %}
+                            {% include 'client/clientSubMenu.html.twig' %}
+                        {% endblock %}
+                    </div>
+                {% endif %}
+                <div class="col-md-12 pb-0">
+                    <div class="col-12 pt-1 addContactOption"><a href="#" class="fa fa-plus-square text-primary addContactOption" > Add Contact</a> </div>
+
+                </div>
+                 <div class="col-md-12 col-12 pb-4 pl-3  ">
+                     {% if errorMessage %}
+                        <div class="col-md-12 col-12 pb-4 pl-3 pt-4 bg-warning text-white rounded">
+                            <ul>
+                                {% for em in errorMessage %}
+                                    <li>{{ em }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                     {% if message %}
+                         <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-info text-white rounded">
+                             <span>{{ message }}</span>
+                         </div>
+                     {% endif %}
+                 </div>
+
+                <!-- CONTACTS -->
+                <div class="col-md-12 col-12  clientSection" id="contact">
+                    <div class="col-md-12 col-12 border-1-coOrange p-4 rounded m-1">
+                        <h5 class="font-weight-bolder">Contacts</h5>
+                        <div class="table-responsive contactTableDiv">
+
+                            <table class="table table-bordered" id="dataTable"  cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Surname</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for c in client.contacts %}
+                                    {% if c.active %}
+                                        <tr>
+                                            <td>{{ c.firstname }}</td>
+                                            <td>{{ c.surname }}</td>
+                                            <td>{{ c.contactNo }}</td>
+                                            <td>{{ c.email }}</td>
+                                            <td><button class="editContact coOrange pl-2 pr-2 rounded bg-white" data-id="{{ c.id }}">Edit</button></td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pt-1 pb-3 contactFormDiv">
+                            {{ form_start(clientContactForm, {attr: { 'class':'form-horizontal' } } ) }}
+                                {{ form_widget(clientContactForm.id) }}
+                                <div class="row pb1 ">
+                                    {{ form_label(clientContactForm.firstname) }}
+                                    <div class="col-md-9">
+                                        {{ form_widget(clientContactForm.firstname) }}
+                                    </div>
+                                </div>
+                                <div class="row pb1 ">
+                                    {{ form_label(clientContactForm.surname) }}
+                                    <div class="col-md-9">
+                                        {{ form_widget(clientContactForm.surname) }}
+                                    </div>
+                                </div>
+                                <div class="row pb1 ">
+                                    {{ form_label(clientContactForm.jobTitle) }}
+                                    <div class="col-md-9">
+                                        {{ form_widget(clientContactForm.jobTitle) }}
+                                    </div>
+                                </div>
+                                <div class="row pb1 ">
+                                    {{ form_label(clientContactForm.contactNo) }}
+                                    <div class="col-md-9">
+                                        {{ form_widget(clientContactForm.contactNo) }}
+                                    </div>
+                                </div>
+                                <div class="row pb1 ">
+                                    {{ form_label(clientContactForm.mobileNo) }}
+                                    <div class="col-md-9">
+                                        {{ form_widget(clientContactForm.mobileNo) }}
+                                    </div>
+                                </div>
+                                <div class="row pb1 ">
+                                    {{ form_label(clientContactForm.email) }}
+                                    <div class="col-md-9">
+                                        {{ form_widget(clientContactForm.email) }}
+                                    </div>
+                                </div>
+                                <div class="row pb1 ">
+                                    {{ form_label(clientContactForm.skype) }}
+                                    <div class="col-md-9">
+                                        {{ form_widget(clientContactForm.skype) }}
+                                    </div>
+                                </div>
+                                <div class="row pb1 ">
+                                    {{ form_label(clientContactForm.linkedIn) }}
+                                    <div class="col-md-9">
+                                        {{ form_widget(clientContactForm.linkedIn) }}
+                                    </div>
+                                </div>
+
+
+                                <div class="row pt-5">
+                                    <div class="col-md-4 ">
+                                        {{ form_row(clientContactForm.submit) }}
+                                    </div>
+                                    {% if is_granted('ROLE_ADMIN')  %}
+                                        <div class="col-md-4 ">
+                                            {{ form_row(clientContactForm.remove) }}
+                                        </div>
+                                    {% endif %}
+                                    <div class="col-md-4 ">
+                                        <button class="btn-warning  text-white border-1-coOrange p-2 addContactOption rounded canxContactOption">Cancel</button>
+                                    </div>
+                                </div>
+                            {{ form_end(clientContactForm, {'render_rest': false}) }}
+                        </div>
+                    </div>
+                </div>
+                <!-- END OF CONTACTS -->
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block pageJavascripts %}
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
+
+    <script>
+        $('.addContactOption').click(function () {
+            $('.contactTableDiv').fadeOut();
+            $('.contactFormDiv').delay( 400 ).fadeIn();
+        });
+        $('.canxContactOption').click(function () {
+            $('.contactFormDiv').fadeOut();
+            $('.contactTableDiv').delay( 400 ).fadeIn();
+        });
+
+        $('.editContact').click(function () {
+            let request = $.ajax({
+                url: '/clientgetcontact',
+                type: 'get',
+                data: {id: $(this).data('id')}
+            });
+            request.done(function (data) {
+                if (data.status == 'ok'){
+                    $('#client_contact_form_id').val(data.data.id);
+                    $('#client_contact_form_firstname').val(data.data.firstname);
+                    $('#client_contact_form_surname').val(data.data.surname);
+                    $('#client_contact_form_email').val(data.data.email);
+                    $('#client_contact_form_contactNo').val(data.data.contactNo);
+                    $('.contactTableDiv').fadeOut();
+                    $('.contactFormDiv').delay( 400 ).fadeIn();
+
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

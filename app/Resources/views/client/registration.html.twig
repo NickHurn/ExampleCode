@@ -1,0 +1,299 @@
+{% if is_granted('ROLE_ADMIN') %}
+    {% set template =  'baseAdmin.html.twig' %}
+{% else %}
+    {% set template = 'baseLogin.html.twig' %}
+{% endif %}
+{% extends template %}
+{% block body %}
+    <div class="container">
+        {% if is_granted('ROLE_ADMIN') %}
+            <span><a href="{{ path('client') }}">clients</a> /  Register Client</span>
+        {% endif %}
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-12 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+
+                        <div class="row">
+                            <div class="col-lg-12 text-center" ><img src="{{ asset('images/foot-logo-1.png') }}" alt=""></div>
+                            <div class="col-lg-12">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Registration</h1>
+                                    </div>
+                                    {% if errorMessage %}
+                                        <div>
+                                            <div class="bg-warning loginError pt-2 pb-2 pl-4 rounded" >{{ errorMessage }}</div>
+                                        </div>
+
+                                    {% endif %}
+                                    {% if message %}
+                                        <div>
+                                            <div class="bg-info pt-2 pb-2 pl-4 text-white rounded" >{{ message }}</div>
+                                        </div>
+
+                                    {% endif %}
+                                    <hr>
+
+                                    <h5>Company Details</h5>
+                                    <div class="row pb1 ">
+                                        <div class="col-md-12 textAlignLeft">
+                                            <label for="">Please enter The Company Name in full or the Company Number</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input name="chouse" class="form-control chouse" type="text">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button class="chsub">Search</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row pb1 ">
+                                        <div class="col-md-6 textAlignLeft">
+                                            <select name="" id="companySelectList" class="form-control companySelectList">
+                                                <option value="0">Please Select</option>
+                                                <option value="999">Not Listed</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {{ form_start(form, {attr: { 'class':'form-horizontal' } } ) }}
+                                        {{ form_row(form.id) }}
+                                        <div class="companyDetailDiv">
+                                            <div class="row pb1 ">
+                                                {{ form_label(form.name) }}
+                                                <div class="col-md-9">
+                                                    {{ form_widget(form.name) }}
+                                                </div>
+                                            </div>
+                                            <div class="row pb1">
+                                                {{ form_label(form.companyNumber) }}
+                                                <div class="col-md-9">
+                                                    {{ form_widget(form.companyNumber) }}
+                                                </div>
+                                            </div>
+                                            <br />
+
+                                            <div class="row pb1 ">
+                                                <label class='col-sm-3 control-label'>Postcode</label>
+                                                <div id="postcode_lookup" class="pl-2 ml-1">
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 ">
+                                                <div class="col-sm-3">
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <p class="font-italic font12 text-danger">We have used your registered address.  If your business address is different from your registered address please search on your new postcode.</p>
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 ">
+                                                <label class='col-sm-3 control-label'>First Address Line</label>
+                                                <div class="col-md-9">
+                                                    <input class="form-control" name="addLine1" id="line1" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 ">
+                                                <label class='col-sm-3 control-label'>Second Address Line</label>
+                                                <div class="col-md-9">
+                                                    <input class="form-control" name="addLine2" id="line2" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 ">
+                                                <label class='col-sm-3 control-label'>Third Address Line</label>
+                                                <div class="col-md-9">
+                                                    <input class="form-control" name="addLine3" id="line3" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 ">
+                                                <label class='col-sm-3 control-label'>Town</label>
+                                                <div class="col-md-9">
+                                                    <input class="form-control" name="addTown" id="town" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 ">
+                                                <label class='col-sm-3 control-label'>County</label>
+                                                <div class="col-md-9">
+                                                    <input class="form-control" name="addCounty" id="county" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 ">
+                                                <label class='col-sm-3 control-label'>Postcode</label>
+                                                <div class="col-md-4 form-group">
+                                                    <input class="form-control" name="addPostcode" id="postcode" type="text">
+                                                </div>
+                                            </div>
+
+                                            <br />
+                                            <div class="row pb1 pt1">
+                                                {{ form_label(form.image) }}
+                                                <div class="col-md-9">
+                                                    {{ form_widget(form.image) }}
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 pt1">
+                                                {{ form_label(form.url) }}
+                                                <div class="col-md-9">
+                                                    {{ form_widget(form.url) }}
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                <h5>Contact Details</h5>
+                                            {% else %}
+                                                <h5>Your Details</h5>
+                                            {% endif %}
+
+                                            <div class="row pb1 pt1">
+                                                {{ form_label(clientContactsForm.firstname) }}
+                                                <div class="col-md-9">
+                                                    {{ form_widget(clientContactsForm.firstname) }}
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 pt1">
+                                                {{ form_label(clientContactsForm.surname) }}
+                                                <div class="col-md-9">
+                                                    {{ form_widget(clientContactsForm.surname) }}
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 pt1">
+                                                {{ form_label(clientContactsForm.email) }}
+                                                <div class="col-md-9">
+                                                    {{ form_widget(clientContactsForm.email) }}
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 pt1">
+                                                {{ form_label(clientContactsForm.jobTitle) }}
+                                                <div class="col-md-9">
+                                                    {{ form_widget(clientContactsForm.jobTitle) }}
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 pt1">
+                                                {{ form_label(clientContactsForm.phone) }}
+                                                <div class="col-md-9">
+                                                    {{ form_widget(clientContactsForm.phone) }}
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 pt1">
+                                                {{ form_label(clientContactsForm.mobile) }}
+                                                <div class="col-md-9">
+                                                    {{ form_widget(clientContactsForm.mobile) }}
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 pt1">
+                                                {{ form_label(clientContactsForm.skype) }}
+                                                <div class="col-md-9">
+                                                    {{ form_widget(clientContactsForm.skype) }}
+                                                </div>
+                                            </div>
+                                            <div class="row pb1 pt1">
+                                                {{ form_label(clientContactsForm.linkedin) }}
+                                                <div class="col-md-9">
+                                                    {{ form_widget(clientContactsForm.linkedin) }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr>
+                                        <div class="row pb1 pt1">
+                                            <div class="col-md-12 textAlignLeft">
+                                                {{ form_row(form.update) }}
+                                            </div>
+                                        </div>
+
+
+
+                                    {{ form_end(form, {'render_rest': false}) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+{% endblock %}
+{% block pageJavascripts %}
+    <!-- Include JQuery v2+ -->
+    <!-- Include plugin file -->
+    <script src="https://getaddress-cdn.azureedge.net/scripts/jquery.getAddress-4.0.0.min.js"></script>
+    <script>
+        $( document ).ready(function() {
+            let cc = $('#clients_form_name').val();
+            if (cc != ''){
+                $('.companyDetailDiv').fadeIn();
+            }
+        });
+    </script>
+    <!-- Add after your form -->
+    <script>
+        $('#postcode_lookup').getAddress(
+            {
+                api_key: 'rvfC9ZRfnU6RNgLTRwZbmg28739 ',
+                output_fields:{
+                    line_1: '#line1',
+                    line_2: '#line2',
+                    line_3: '#line3',
+                    post_town: '#town',
+                    county: '#county',
+                    postcode: '#postcode'
+                }
+            });
+    </script>
+
+    <script>
+        $('.chsub').click(function () {
+            var request = $.ajax({
+                url: '/client/companySearch',
+                type: 'get',
+                data: {search: $('.chouse').val()}
+            });
+            request.done(function (data) {
+                if (data.status == 'ok'){
+                    let result = data.data
+                    $('.companySelectList').show();
+                    for (var i = 0; i < result.length; i++) {
+                        $('.companySelectList').append(
+                            '<option value="'+ result[i].company_number +'" class="schemeDetails">'+ result[i].title +'</option>'
+                        );
+                    }
+                }
+            });
+        });
+
+        $(".companySelectList").on("change", function(){
+            var request = $.ajax({
+                url: '/client/getCompaniesHouseRecord',
+                type: 'get',
+                data: {search: $(".companySelectList option:selected").val()}
+            });
+            request.done(function (data) {
+                if (data.status == 'ok'){
+                    let result = data.data
+                    $('.companyDetailDiv').fadeIn();
+                    $('.companyName').val(result.companyName);
+                    $('.companyNumber').val(result.companyNumber);
+                    $('#line1').val(result.addLine1);
+                    if (result.addLine2) {
+                        $('#line2').val(result.addLine2);
+                    }
+                    $('#town').val(result.addTown);
+                    if (result.addCounty) {
+                        $('#county').val(result.addCounty);
+                    }
+                    $('#postcode').val(result.addPostcode);
+                }
+            });
+
+        });
+    </script>
+{% endblock %}

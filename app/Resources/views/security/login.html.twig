@@ -1,0 +1,66 @@
+{% extends 'baseLogin.html.twig' %}
+
+{% block body %}
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+
+                        <div class="row p-3">
+                            <div class="col-lg-6 d-none d-lg-block bg-login">
+                                <img src="{{ asset('images/'~companyDetails.companyDetails.logo) }}" alt="dsgdsg"  >
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                    </div>
+                                    {% if error %}
+                                        <div>
+                                            <div class="bg-warning loginError p-3 rounded">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                        </div>
+
+                                    {% endif %}
+                                    <form action="{{ path('login') }}" method="post">
+                                        <fieldset class="form-group position-relative has-icon-left mb-0">
+                                            <input type="text" name="_username" value="{{ last_username }}" class="form-control form-control-lg input-lg" id="user-name" placeholder="Your Email address"/>
+                                            <div class="form-control-position"><i class="icon-head"></i></div>
+                                        </fieldset>
+                                        <fieldset class="form-group position-relative has-icon-left">
+                                            <input type="password" name="_password" value="" class="form-control form-control-lg input-lg" id="user-password" placeholder="Enter Password"/>
+                                            <div class="form-control-position"><i class="icon-key3"></i></div>
+                                        </fieldset>
+                                        <fieldset class="form-group row">
+                                            <div class="col-md-6 col-xs-12 text-xs-center text-md-left">
+
+                                            </div>
+                                        </fieldset>
+                                        <input  type="submit" class="btn btn-info btn-lg btn-block" value="Login" name="submit">
+                                    </form>
+                                    <hr>
+                                    <div class="text-center">
+                                        <a href="{{ path('forgotpassword') }}" class="card-link pt1">Forgot Password?</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+{% endblock %}
+

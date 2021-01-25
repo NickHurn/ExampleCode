@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Login</title>
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/formatStyles.css">
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body class="bg-coGrey">
+    {% block body %}{% endblock %}
+
+    {% block javascripts %}
+        <script src="{{ asset('js/jquery3.5.1.js') }}"></script>
+        <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <script src="/js/sb-admin-2.min.js"></script>
+    {% endblock %}
+    {% block pageJavascripts %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 
+    database_port: 
+    database_name: 
+    database_user: 
+    database_password: 
+    mailer_transport: 
+    mailer_host: 
+    mailer_user: 
+    mailer_password: 
+    secret: 
+    contact_request_email: 
+    new_user_email: 
+    domain: 
+    client_documents: 
+    root_document_path: 
+    images: 
+    companiesHouseAPI: 
+    release: 
+
+
+    #flag activates
+    website_active: true
+    use_website_clients: false
+

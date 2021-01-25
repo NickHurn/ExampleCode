@@ -1,0 +1,284 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <span class="font08 font-italic">Users / <a href="{{ path('new_client_details') }}">{{ title|lower }}</a></span>
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary">New User</h6></div>
+            <div class="card-body">
+                <div class="col-md-12 col-12 pb-4 pl-3  ">
+                    {% if errorMessage %}
+                        {% for em in errorMessage %}
+                            <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-gradient-danger text-white rounded">{{ em }}</div>
+                        {% endfor %}
+
+                    {% endif %}
+                    {% if message %}
+                        <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-gradient-info text-white rounded"><span>{{ message }}</span></div>
+                    {% endif %}
+                </div>
+
+
+                <div class="col-md-12 col-sm-12">
+                    {{ form_start(clientForm, {attr: { 'class':'form-horizontal' } } ) }}
+                        <h5 class="font-weight-bold">Client Details</h5>
+                        <div class="row pb1 ">
+                            {{ form_label(clientForm.clientType) }}
+                            <div class="col-auto">{{ form_widget(clientForm.clientType) }}</div>
+                        </div>
+                        {#co house form options#}
+                        <div class="coLookUp">
+                            <div class="row pb1 ">
+                                <div class="col-md-3 textAlignLeft">
+                                    <label for="">Please enter The Company Number in full or the Company Name</label>
+                                </div>
+                                <div class="col-md-5">
+                                    <input name="chouse" class="form-control chouse" type="text">
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="#" class="chsub btn btn-primary">Search</a>
+                                </div>
+                            </div>
+                            <div class="coSelect">
+                                <div class="row pb1  ">
+                                    <div class="col-md-3">
+                                        <label for="">Please Select a company</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <select name="" id="companySelectList" class="form-control companySelectList">
+                                            <option value="0">Please Select</option>
+                                            <option value="999">Not Listed</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {#co details#}
+                        <div class="coNameDiv">
+                            <div class="row pb1 ">
+                                {{ form_label(clientForm.company) }}
+                                <div class="col-md-9">{{ form_widget(clientForm.company) }}</div>
+                            </div>
+                            <div class="row pb1 ">
+                                <label class='col-sm-3 control-label'>Company Number:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="companyNumber" id="companyNumber" type="text"  READONLY >
+                                </div>
+
+                            </div>
+                            <div class="row pb1 ">
+                                {{ form_label(clientForm.url) }}
+                                <div class="col-md-9">
+                                    {{ form_widget(clientForm.url) }}
+                                </div>
+                            </div>
+                            <div class="row pb1 ">
+                                {{ form_label(clientForm.image) }}
+                                <div class="col-md-9">
+                                    {{ form_widget(clientForm.image) }}
+                                </div>
+                            </div>
+                            <hr />
+                            <h6 class="font-weight-bold">Registered Address</h6>
+                            <div class="row pb1 mt-3">
+                                <label class='col-sm-3 control-label'>First Address Line:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="rAddLine1" id="rLine1" type="text" disabled>
+                                </div>
+                            </div>
+                            <div class="row pb1 ">
+                                <label class='col-sm-3 control-label'>Second Address Line:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="rAddLine2" id="rLine2" type="text" disabled>
+                                </div>
+                            </div>
+                            <div class="row pb1 ">
+                                <label class='col-sm-3 control-label'>Third Address Line:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="rAddLine3" id="rLine3" type="text" disabled>
+                                </div>
+                            </div>
+                            <div class="row pb1 ">
+                                <label class='col-sm-3 control-label'>Town:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="rAddTown" id="rTown" type="text" disabled>
+                                </div>
+                            </div>
+                            <div class="row pb1 ">
+                                <label class='col-sm-3 control-label'>County:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="rAddCounty" id="rCounty" type="text" disabled>
+                                </div>
+                            </div>
+                            <div class="row pb1 ">
+                                <label class='col-sm-3 control-label'>Postcode:</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="rAddPostcode" id="rPostcode" type="text" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        {#contact Details#}
+                        <h5 class="font-weight-bold">Contact Details</h5>
+                        <div class="row pb1 ">
+                            {{ form_label(clientForm.firstname) }}
+                            <div class="col-md-9">{{ form_widget(clientForm.firstname) }}</div>
+                        </div>
+                        <div class="row pb1 ">
+                            {{ form_label(clientForm.surname) }}
+                            <div class="col-md-9">{{ form_widget(clientForm.surname) }}</div>
+                        </div>
+                        <div class="row pb1 ">
+                            <label class='col-sm-3 control-label'>Job Title:</label>
+                            <div class="col-md-4">
+                                <input class="form-control" name="jobTitle" id="jobTitle" type="text">
+                            </div>
+                        </div>
+                        <div class="row pb1 ">
+                            <label class='col-sm-3 control-label'>Contact Number:</label>
+                            <div class="input-group col-md-4">
+                                <div class="input-group-prepend ">
+                                    <div class="input-group-text bg-primary"><i class="fa fa-phone text-white"></i></div>
+                                </div>
+                                <input class="form-control" name="contactNumber" id="contactNumber" type="text">
+                            </div>
+
+                        </div>
+                        <div class="row pb1 ">
+                            <label class='col-sm-3 control-label'>Mobile Number:</label>
+                            <div class="input-group col-md-4">
+                                <div class="input-group-prepend ">
+                                    <div class="input-group-text bg-primary"><i class="fas fa-tablet-alt text-white"></i></div>
+                                </div>
+                                <input class="form-control" name="mobileNumber" id="mobileNumber" type="text">
+                            </div>
+                        </div>
+                        <div class="row pb1 ">
+                            <label class='col-sm-3 control-label'>Email:</label>
+                            <div class="input-group col-md-4">
+                                <div class="input-group-prepend ">
+                                    <div class="input-group-text bg-primary"><i class="fa fa-envelope text-white"></i></div>
+                                </div>
+                                <input class="form-control" name="email" id="email" type="text"  required>
+                            </div>
+                        </div>
+                        <div class="row pb1 ">
+                            <label class='col-sm-3 control-label'>LinkedIn:</label>
+                            <div class="input-group col-md-4">
+                                <div class="input-group-prepend ">
+                                    <div class="input-group-text bg-primary"><i class="fab fa-linkedin text-white"></i></div>
+                                </div>
+                                <input class="form-control" name="linkedIn" id="linkedIn" type="text">
+                            </div>
+                        </div>
+                        <div class="row pb1 ">
+                            <label class='col-sm-3 control-label'>Skype:</label>
+                            <div class="input-group col-md-4">
+                                <div class="input-group-prepend ">
+                                    <div class="input-group-text bg-primary"><i class="fab fa-skype text-white"></i></div>
+                                </div>
+                                <input class="form-control" name="skype" id="skype" type="text">
+                            </div>
+                        </div>
+
+                        {#postal address Details#}
+                        <div class="postalAddressDiv">
+                            <hr />
+                            <h6 class="font-weight-bold">Postal Address</h6>
+
+                            <!--test postcode TR19 7AA-->
+                            {#<div class="row pb1 ">#}
+                                {#<label class='col-sm-12 control-label'>Postcode:</label>#}
+                                {#<div id="postcode_lookup" class="pl-2 ml-1">#}
+                                {#</div>#}
+                            {#</div>#}
+
+                            <div class="row pb1 mt-3">
+                                <label class='col-sm-3 control-label'>First Address Line:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="addLine1" id="line1" type="text" required>
+                                </div>
+                            </div>
+                            <div class="row pb1 ">
+                                <label class='col-sm-3 control-label'>Second Address Line:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="addLine2" id="line2" type="text">
+                                </div>
+                            </div>
+                            <div class="row pb1 ">
+                                <label class='col-sm-3 control-label'>Third Address Line:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="addLine3" id="line3" type="text">
+                                </div>
+                            </div>
+                            <div class="row pb1 ">
+                                <label class='col-sm-3 control-label'>Town:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="addTown" id="town" type="text" required>
+                                </div>
+                            </div>
+                            <div class="row pb1 ">
+                                <label class='col-sm-3 control-label'>County:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="addCounty" id="county" type="text">
+                                </div>
+                            </div>
+                            <div class="row pb1 ">
+                                <label class='col-sm-3 control-label'>Postcode:</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="addPostcode" id="postcode" type="text" required>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="row pb1 pt1 mt-4">
+                        <div class="col-md-12 textAlignLeft">
+                            {{ form_row(clientForm.save) }}
+                        </div>
+                    </div>
+
+                    {{ form_end(clientForm, {'render_rest': false}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+{% endblock %}
+{% block pageJavascripts %}
+    {#<script src="https://getaddress-cdn.azureedge.net/scripts/jquery.getAddress-4.0.0.min.js"></script>#}
+    <script src="{{ asset('js/companiesHouse/companiesHouse.js') }}"></script>
+    <script>
+        // $('#postcode_lookup').getAddress(
+        //     {
+        //         api_key: 'rvfC9ZRfnU6RNgLTRwZbmg28739 ',
+        //         output_fields:{
+        //             line_1: '#line1',
+        //             line_2: '#line2',
+        //             line_3: '#line3',
+        //             post_town: '#town',
+        //             county: '#county',
+        //             postcode: '#postcode'
+        //         }
+        //     });
+
+        $(".clientType").on("change", function(){
+
+            if ($(".clientType").val()=='c')
+            {
+                $('.coLookUp').slideDown();
+                $('.coNameDiv').slideDown();
+            }
+
+            if ($(".clientType").val()=='i')
+            {
+                $('.coLookUp').slideUp();
+                $('.coNameDiv').slideUp();
+            }
+            $('.postalAddressDiv').slideDown();
+        });
+
+
+    </script>
+{% endblock %}
+
+
+

@@ -1,0 +1,122 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <span class="font08 font-italic">clients / <a href="{{ path('find_clients') }}">find clients</a> / <a href="{{ path('client',{'guid':client.guid}) }}">{{ client.displayName|lower }}</a> / <a href="{{ path('client_invoices',{'guid':client.guid}) }}">client invoices</a> / {{ title|lower }}</span>
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+                <div class="row">
+                    <div class="col-6">
+                        <h6 class="m-0 font-weight-bold text-primary">{{ client.displayName }}</h6>
+                    </div>
+                     <div class="col-6 text-right">
+                        <span class="m-0 font-weight-bold text-primary">Client ID:</span> {{ client.id }}
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                 <div class="col-md-12 col-12 pb-4 pl-3  ">
+                     {% if errorMessage %}
+                        <div class="col-md-12 col-12 pb-4 pl-3 pt-4 bg-warning text-white rounded">
+                            <ul>
+                                {% for em in errorMessage %}
+                                    <li>{{ em }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                     {% if message %}
+                         <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-info text-white rounded">
+                             <span>{{ message }}</span>
+                         </div>
+                     {% endif %}
+                 </div>
+
+
+                <h5>New Invoice</h5>
+
+
+                <div class="pt-1 pb-3  border-1-coOrange rounded p-4 mb-2">
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Quantity / Days</th>
+                            <th scope="col">Unit Price</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{ form_start(clientInvoiceForm, {attr: { 'class':'' } } ) }}
+                        {{ form_widget(clientInvoiceForm.id) }}
+                        <tr>
+                            <td>{{ form_widget(clientInvoiceForm.days) }}</td>
+                            <td>{{ form_widget(clientInvoiceForm.dayRate) }}</td>
+                            <td>{{ form_widget(clientInvoiceForm.description) }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_widget(clientInvoiceForm.days2) }}</td>
+                            <td>{{ form_widget(clientInvoiceForm.dayRate2) }}</td>
+                            <td>{{ form_widget(clientInvoiceForm.description2) }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_widget(clientInvoiceForm.days3) }}</td>
+                            <td>{{ form_widget(clientInvoiceForm.dayRate3) }}</td>
+                            <td>{{ form_widget(clientInvoiceForm.description3) }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_widget(clientInvoiceForm.days4) }}</td>
+                            <td>{{ form_widget(clientInvoiceForm.dayRate4) }}</td>
+                            <td>{{ form_widget(clientInvoiceForm.description4) }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_widget(clientInvoiceForm.days5) }}</td>
+                            <td>{{ form_widget(clientInvoiceForm.dayRate5) }}</td>
+                            <td>{{ form_widget(clientInvoiceForm.description5) }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">{{ form_label(clientInvoiceForm.discount) }}</td>
+                            <td> {{ form_widget(clientInvoiceForm.discount) }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><label for="">Payment Terms in days</label></td>
+                            <td ><input type="text" id="" name="paymentTerms" class="form-control" value="{{ invoiceSettings.paymentTerms }}"></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">VAT Applicable (@ <span class="vatRate">{{ invoiceSettings.vatRate }}</span>%)</td>
+                            <td> {{ form_widget(clientInvoiceForm.vat) }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">{{ form_row(clientInvoiceForm.submit) }}</td>
+                        </tr>
+                        {{ form_end(clientInvoiceForm, {'render_rest': false}) }}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block pageJavascripts %}
+
+    <script>
+        $(document).ready(function(){
+            let vatRate = $('.vatRate').html();
+            if (vatRate === '0.00') {
+                $("#client_invoice_form_vat").prop("checked", false);
+            }else{
+                $("#client_invoice_form_vat").prop("checked", true);
+            }
+
+
+        });
+
+    </script>
+
+
+{% endblock %}

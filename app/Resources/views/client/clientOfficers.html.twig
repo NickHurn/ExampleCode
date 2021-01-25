@@ -1,0 +1,196 @@
+{% if is_granted('ROLE_ADMIN') %}
+    {% set template =  'baseAdmin.html.twig' %}
+{% else %}
+    {% set template = 'baseUser.html.twig' %}
+{% endif %}
+{% extends template %}
+{% block body %}
+    <div class="container-fluid">
+        {% if is_granted('ROLE_ADMIN')%}
+            <span class="font08 font-italic">clients / <a href="{{ path('find_clients') }}">find clients</a> / {{ client.displayName|lower }} / {{ title|lower }}</span>
+        {% elseif is_granted('ROLE_CLIENT')%}
+            <span class="font08 font-italic"> {{ title|lower }} </span>
+        {% endif %}
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+                <div class="row">
+                    <div class="col-6">
+                        <h5 class="m-0 font-weight-bold text-primary">{{ client.displayName }}</h5>
+                    </div>
+                    <div class="col-6 text-right">
+                        <span class="m-0 font-weight-bold text-primary">Client ID:</span> {{ client.id }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="col-md-12 col-12 pb-4 pl-3">
+                    {% block clientSubMenu %}
+                        {% include 'client/clientSubMenu.html.twig' %}
+                    {% endblock %}
+                </div>
+                 <div class="col-md-12 col-12 pb-4 pl-3  ">
+                     {% if errorMessage %}
+                        <div class="col-md-12 col-12 pb-4 pl-3 pt-4 bg-warning text-white rounded">
+                            <ul>
+                                {% for em in errorMessage %}
+                                    <li>{{ em }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                     {% if message %}
+                         <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-info text-white rounded">
+                             <span>{{ message }}</span>
+                         </div>
+                     {% endif %}
+                 </div>
+                <!-- COMPANY DETAILS -->
+                <div class="col-md-12 col-12 clientSection" id="details">
+                    <div class="col-md-12  col-12 border border-primary p-4 rounded m-1">
+                        <div class="table-responsive contactTableDiv">
+                            <table class="table table-bordered" id="dataTable"  cellspacing="0">
+                                <thead>
+                                <tr class="text-center">
+                                    <th>Name</th>
+                                    <th>Appointed On</th>
+                                    <th>officer_role</th>
+                                    <th>Resigned On</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for c in client.companyHouse.officers %}
+                                    <tr {% if c.resigneOn %} class="bg-gradient-danger text-white" {% else %} class="bg-gradient-success text-white"{% endif %}>
+                                        <td>{{ c.name }}</td>
+                                        <td>{{ c.appointedOn|date('d-m-y') }}</td>
+                                        <td>{{ c.officerRole }}</td>
+                                        <td>{% if c.resigneOn %} {{ c.resigneOn|date('d-m-y') }}{% endif %}</td>
+                                        <td><btn type="button" class="btn btn bg-light modalBtn" data-toggle="modal" data-target="#exampleModal" data-id="{{ c.id }}"><span class="fa fa-eye  "></span></btn></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title officerName" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <div><span class="font-weight-bold">Appointed On:</span> <span class="officerAppointedOn"></span></div>
+                        <div class="officerResignedRow"><span class="font-weight-bold ">Resigned On:</span> <span class="officerResignedOn"></span></div>
+                        <div><span class="font-weight-bold">Occupation:</span> <span class="officerOccupation"></span></div>
+                        <div><span class="font-weight-bold">Officer Role:</span> <span class="officerRole"></span></div>
+                    </p>
+                    <p>
+                        <div><span class="font-weight-bold">Nationality:</span> <span class="officerNationality"></span></div>
+                        <div><span class="font-weight-bold">Date Of Birth:</span> <span class="oDOB"></span></div>
+                        <div class="fornameRow"><span class="font-weight-bold">Former Forename:</span> <span class="oFForname"></span></div>
+                        <div class="surnameRow"><span class="font-weight-bold">Former Surname:</span> <span class="OFSurname"></span></div>
+                        <div><span class="font-weight-bold">Country of Residence:</span> <span class="oResidence"></span></div>
+
+                    </p>
+                    <p>
+                        <div class="oCareOfRow"><span class="font-weight-bold">Care Of:</span> <span class="oCareOf"></span></div>
+                        <div class="oPoBoxRow"><span class="font-weight-bold">PO Box:</span> <span class="oPoBox"></span></div>
+                        <div><span class="font-weight-bold">Address Line 1:</span> <span class="oAddLine1"></span></div>
+                        <div class="oAddLine2Row"><span class="font-weight-bold">Address Line 2:</span> <span class="oAddLine2"></span></div>
+                        <div> <span class="font-weight-bold">Town:</span> <span class="oTown"></span></div>
+                        <div class="oCountyRow"><span class="font-weight-bold">County:</span> <span class="oCounty"></span></div>
+                        <div><span class="font-weight-bold">Post Code:</span> <span class="oPostCode"></span></div>
+                        <div><span class="font-weight-bold">Country:</span> <span class="oCountry"></span></div>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block pageJavascripts %}
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
+    <script src="{{ asset('js/companiesHouse/companiesHouse.js') }}"></script>
+    <script>
+        $('.modalBtn').click(function () {
+            var request = $.ajax({
+                url: '/companieshouse/getofficerdetails',
+                type: 'get',
+                data: {id: $(this).data('id')}
+            });
+            request.done(function (data) {
+                console.log(data.data)
+                if (data.status == 'ok'){
+                    $('.officerName').text(data.data.name);
+                    $('.officerAppointedOn').text(data.data.appointedOn);
+                    if (data.data.resigneOn == null) {
+                        $('.officerResignedRow').hide();
+                    }else{
+                        $('.officerResignedOn').text(data.data.resigneOn);
+                    }
+                    $('.officerOccupation').text(data.data.occupation);
+                    $('.officerRole').text(data.data.officer_role);
+                    $('.officerNationality').text(data.data.nationality);
+                    if (data.data.dayOfBirth != null){
+                        $('.oDOB').text(data.data.dayOfBirth+'-'+data.data.monthOfBirth+'-'+data.data.yearOfBirth);
+                    }else {
+                        $('.oDOB').text(dob =data.data.monthOfBirth+'-'+data.data.yearOfBirth);
+                    }
+                    if (data.data.formerForename == null){
+                        $('.fornameRow').hide();
+                    } else{
+                        $('.fornameRow').text(data.data.formerForename);
+                    }
+                    if (data.data.formerSurname == null){
+                        $('.surnameRow').hide();
+                    } else{
+                        $('.surnameRow').text(data.data.formerSurname);
+                    }
+                    $('.oResidence').text(data.data.countryOfResidence);
+
+                    if (data.data.addCareOf == null){
+                        $('.oCareOfRow').hide();
+                    } else{
+                        $('.oCareOf').text(data.data.addCareOf);
+                    }
+                    $('.oAddLine1').text(data.data.addLine1);
+                    if (data.data.addPOBox == null){
+                        $('.oPoBoxRow').hide();
+                    } else{
+                        $('.oPoBox').text(data.data.addPOBox);
+                    }
+                    if (data.data.addLine2 == null){
+                        $('.oAddLine2Row').hide();
+                    } else{
+                        $('.oAddLine2').text(data.data.addLine2);
+                    }
+                    $('.oTown').text(data.data.addTown);
+                    if (data.data.addCounty == null){
+                        $('.oCountyRow').hide();
+                    } else{
+                        $('.oCounty').text(data.data.addCounty);
+                    }
+                    $('.oPostCode').text(data.data.addPostcode);
+                    $('.oCountry').text(data.data.addCountry);
+
+                }
+            });
+
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <span class="font08 font-italic">Users / <a href="{{ path('new_user_details') }}">{{ title|lower }}</a></span>
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">New User</h6>
+            </div>
+            <div class="card-body">
+                {% if errorMessage %}
+                    <div class="col-md-12 col-sm-12">
+                        <div class="bg-warning loginError p-3 rounded">{{ errorMessage }}</div>
+                    </div>
+
+                {% endif %}
+                {% if message %}
+                    <div class="col-md-12 col-sm-12">
+                        <div class="bg-success text-white p-3 rounded">{{ message }}</div>
+                    </div>
+
+                {% endif %}
+                <div class="col-md-12 col-sm-12">
+                    {{ form_start(userForm, {attr: { 'class':' ' } } ) }}
+                        <div class="row">
+                             <div class="col-md-12 col-sm-12">
+                                 <div class="col-xs-12 textAlignLeft">
+                                    {{ form_label(userForm.firstname) }}
+                                </div>
+                                <div class="col-xs-12">
+                                    <fieldset class="form-group has-icon-left mb-1">
+                                        {{ form_widget(userForm.firstname) }}
+                                        <div class="form-control-position">
+                                            <i class="icon-head"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 col-sm-12">
+                                <div class="col-xs-12 textAlignLeft">
+                                    {{ form_label(userForm.surname) }}
+                                </div>
+                                <div class="col-xs-12">
+                                    <fieldset class="form-group has-icon-left mb-1">
+                                        {{ form_widget(userForm.surname) }}
+                                        <div class="form-control-position">
+                                            <i class="icon-head"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12">
+                                <div class="col-xs-12 textAlignLeft">
+                                    {{ form_label(userForm.username) }}
+                                </div>
+                                <div class="col-xs-12">
+                                    <fieldset class="form-group has-icon-left mb-1">
+                                        {{ form_widget(userForm.username) }}
+                                        <div class="form-control-position">
+                                            <i class="icon-head"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 pt-3">
+                                <div class="col-xs-12 textAlignLeft">
+                                    {{ form_widget(userForm.save) }}
+                                </div>
+                            </div>
+                        </div>
+
+                    {{ form_end(userForm, {'render_rest': false}) }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+{% endblock %}
+{% block pageJavascripts %}
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
+{% endblock %}
+
+
+

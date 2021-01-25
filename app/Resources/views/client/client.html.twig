@@ -1,0 +1,299 @@
+{% if is_granted('ROLE_ADMIN')%}
+    {% set base = 'baseAdmin.html.twig' %}
+{% elseif is_granted('ROLE_CLIENT')%}
+    {% set base = 'baseClient.html.twig' %}
+{% endif %}
+
+{% extends base %}
+{% block body %}
+    <div class="container-fluid">
+        {% if is_granted('ROLE_ADMIN')%}
+            <span class="font08 font-italic">clients / <a href="{{ path('find_clients') }}">find clients</a> / {{ client.displayName|lower }} / {{ title|lower }}</span>
+        {% elseif is_granted('ROLE_CLIENT')%}
+            <span class="font08 font-italic"> {{ title|lower }} </span>
+        {% endif %}
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+                <div class="row">
+                    <div class="col-6">
+                        <h5 class="m-0 font-weight-bold text-primary">{{ client.displayName }}</h5>
+                    </div>
+                     <div class="col-6 text-right">
+                        <span class="m-0 font-weight-bold text-primary ">Client ID:</span><span class="clientId"> {{ client.id }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if is_granted('ROLE_ADMIN')%}
+                    <div class="col-md-12 col-12 pb-4 pl-3">
+                        {% block clientSubMenu %}
+                            {% include 'client/clientSubMenu.html.twig' %}
+                        {% endblock %}
+                    </div>
+                {% endif %}
+
+
+                <div class="col-md-12 col-12 pb-4 pl-3  ">
+                     {% if errorMessage %}
+                        <div class="col-md-12 col-12 pb-4 pl-3 pt-4 bg-warning text-white rounded">
+                            <ul>
+                                {% for em in errorMessage %}
+                                    <li>{{ em }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                     {% if message %}
+                         <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-info text-white rounded">
+                             <span>{{ message }}</span>
+                         </div>
+                     {% endif %}
+                 </div>
+                <!-- COMPANY DETAILS -->
+                <div class="col-md-12 col-12 clientSection" id="details">
+                    <div class="col-md-12  col-12 border-1-coOrange p-4 rounded m-1">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5 class="font-weight-bolder  coOrange">Client Details</h5>
+                                {% if client.companyHouse %}
+                                    <span class="font08 coGrey font-italic">(Last updated on companies house: {{ client.companyHouse.dateAdded|date('d-m-y')  }})</span>
+                                {% endif %}
+
+                            </div>
+                            {% if client.companyHouse %}
+                                {% if client.companyHouse.active != 'active' %}
+                                    <div class="col-6 bg-gradient-danger rounded p-4 mt-2 mb-2">
+                                        <span class="text-white">The company status on Companies House is {{ client.companyHouse.active }}</span>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+
+                        </div>
+                        {{ form_start(form, {attr: { 'class':' ' } } ) }}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row pb-1 pt-">
+                                        <div class="col-md-12 ">
+                                            <div class="row pb-1 pt-1">
+                                                <div class="col-md-12 ">
+                                                    <span class="font-weight-bold">Client Name:</span> {{ client.displayName }}
+                                                    <span class="o-hidden">{{ form_widget(form.company) }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="row pb-1 pt-1">
+                                                <div class="col-md-12 ">
+                                                    <span class="font-weight-bold">Client Status:</span> {% if client.active == 1 %} <span class="text-success">Active</span> {% else %} <span class="text-danger">Disabled</span>{% endif %}
+                                                </div>
+                                            </div>
+
+                                            {% if client.clientType == 'c' %}
+
+                                                <div class="row pb-1 pt-1">
+                                                    <div class="col-md-12 pl-0">
+                                                        <span class="font-weight-bold ">{{ form_label(form.url) }}</span>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        {{ form_widget(form.url) }}
+                                                    </div>
+                                                </div>
+                                                <div class="row pb-1 pt-1">
+                                                    <div class="col-md-12 pl-0">
+                                                        <span class="font-weight-bold">{{ form_label(form.image) }}</span>
+                                                    </div>
+                                                    <div class="col-md-12 ">
+                                                        {{ form_widget(form.image) }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="row pb-1 pt-3">
+                                                    <div class="col-md-12 ">
+                                                        <hr class="bg-gradient-success"/>
+                                                    </div>
+                                                </div>
+                                                <div class="row pb-1 pt-3">
+                                                    <div class="col-md-12 ">
+                                                       <h5 class="font-weight-bold  coOrange">Companies House Details</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row pb-1 pt-1">
+                                                     <div class="col-md-12 ">
+                                                         <span class="font-weight-bold">Company Number:</span> {% if client.companyHouse %}{{ client.companyHouse.companyNumber }} {%  else %} No search done on companies house yet{% endif %}
+                                                     </div>
+                                                    {% if client.companyHouse is null %}
+                                                        <div class="col-md-12 ">
+                                                            <div class="row pb1 ">
+                                                                <div class="col-md-3 textAlignLeft">
+                                                                    <label for="">Please enter The Company Number in full or the Company Name</label>
+                                                                </div>
+                                                                <div class="col-md-5">
+                                                                    <input name="chouse" class="form-control chouse" type="text">
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <a href="#" class="chsub btn btn-primary">Search</a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="coSelect">
+                                                                <div class="row pb1  ">
+                                                                    <div class="col-md-3">
+                                                                        <label for="">Please Select a company</label>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <select name="" id="companySelectList" class="form-control companySelectList">
+                                                                            <option value="0">Please Select</option>
+                                                                            <option value="999">Not Listed</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                       <a href="#" class="btn btn-primary saveClientCompanyHouseDetails" >Update Companies House Details" </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                 </div>
+                                                {% if client.companyHouse %}
+                                                    <div class="row pb-1 pt-3">
+                                                        <div class="col-md-12 ">
+                                                            <span class="font-weight-bold">Registered Address</span>
+                                                        </div>
+                                                        <div class="col-md-12 ">
+                                                           {{ client.companyHouse.addLine1 }}
+                                                        </div>
+                                                        {% if client.companyHouse.addLine2 %}
+                                                            <div class="col-md-12 ">
+                                                                {{ client.companyHouse.addLine2 }}
+                                                            </div>
+                                                        {% endif %}
+                                                        {% if client.companyHouse.addLine3 %}
+                                                            <div class="col-md-12 ">
+                                                                {{ client.companyHouse.addLine3 }}
+                                                            </div>
+                                                        {% endif %}
+                                                        <div class="col-md-12 ">
+                                                            {{ client.companyHouse.addTown }}
+                                                        </div>
+                                                        {% if client.addCounty %}
+                                                            <div class="col-md-12 ">
+                                                                {{ client.companyHouse.addCounty }}
+                                                            </div>
+                                                        {% endif %}
+                                                        <div class="col-md-12 ">
+                                                            {{ client.companyHouse.addPostcode }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row pb-1 pt-1">
+                                                        <div class="col-md-12 ">
+                                                            <span class="font-weight-bold">Company Status:</span> {% if client.companyHouse.active == 'active' %}<span class="text-success">{{ client.companyHouse.active }}</span>{% else %}<span class="text-danger">{{ client.companyHouse.active }}</span>{% endif %}
+                                                        </div>
+                                                        <div class="col-md-12 ">
+                                                            <span class="font-weight-bold">Date of Registered:</span> {{ client.companyHouse.dateOfCreation|date('d-M-Y') }}
+                                                        </div>
+                                                        {% if client.companyHouse.dateOfCessation is not null %}
+                                                        <div class="col-md-12 ">
+                                                            <span class="font-weight-bold">Date of Cessation:</span>{{ client.companyHouse.dateOfCessation|date('d-M-Y') }}
+                                                        </div>
+                                                        {% endif %}
+                                                        <div class="col-md-12 ">
+                                                            <span class="font-weight-bold">Company Type:</span> {{ client.companyHouse.companyType }}
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row ">
+                                        <div class="col-md-12 ">
+                                            <h5 class="font-weight-bold coOrange">Postal Address</h5>
+                                        </div>
+                                        <div class="col-md-12 ">
+                                            {{ form_row(form.addLine1) }}
+                                        </div>
+                                        <div class="col-md-12 ">
+                                            {{ form_row(form.addLine1) }}
+                                        </div>
+                                    </div>
+                                    <div class="row pb-1 pb-1">
+                                        <div class="col-md-12 ">
+                                            {{ form_label(form.addLine2) }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            {{ form_widget(form.addLine2) }}
+                                        </div>
+                                    </div>
+                                    <div class="row pb-1 pb-1">
+                                        <div class="col-md-12 ">
+                                            {{ form_label(form.addLine3) }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            {{ form_widget(form.addLine3) }}
+                                        </div>
+                                    </div>
+                                    <div class="row pb-1 pb-1">
+                                        <div class="col-md-12 ">
+                                            {{ form_label(form.addTown) }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            {{ form_widget(form.addTown) }}
+                                        </div>
+                                    </div>
+                                    <div class="row pb-1 pb-1">
+                                        <div class="col-md-12 ">
+                                            {{ form_label(form.addCounty) }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            {{ form_widget(form.addCounty) }}
+                                        </div>
+                                    </div>
+                                    <div class="row pb-1 pb-1">
+                                        <div class="col-md-12 ">
+                                            {{ form_label(form.addPostcode) }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            {{ form_widget(form.addPostcode) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-md-1 ">
+                                    {{ form_row(form.save) }}
+                                </div>
+                                {% if is_granted('ROLE_ADMIN')%}
+                                    <div class="col-md-1 ">
+                                        {{ form_row(form.remove) }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {{ form_end(form, {'render_rest': false}) }}
+                    </div>
+                </div>
+                <!-- END OF COMPANY DETAILS -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block pageJavascripts %}
+    <script src="{{ asset('js/companiesHouse/companiesHouse.js') }}"></script>
+    <script>
+        $('.saveClientCompanyHouseDetails').click(function () {
+            let e = document.getElementById("companySelectList");
+            let request = $.ajax({
+                url: '/saveclientCompanieshousedetails',
+                type: 'get',
+                data: {coNo: e.value, id: $('.clientId').html()}
+            });
+            request.done(function (data) {
+                if (data.status == 'ok') {
+                    location.reload();
+                }
+                if (data.status == 'error') {
+                    alert('That company is already assigned to a client.');
+                }
+            });
+        });
+    </script>
+
+
+{% endblock %}

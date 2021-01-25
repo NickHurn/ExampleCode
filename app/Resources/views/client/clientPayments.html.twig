@@ -1,0 +1,166 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+
+        <span class="font08 font-italic">
+            clients
+            / <a href="{{ path('find_clients') }}">find clients</a>
+            / <a href="{{ path('client',{'guid':client.guid}) }}">{{ client.displayName|lower }}</a>
+            / <a href="{{ path('client_account',{'guid':client.guid}) }}">client account</a>
+            / {{ title|lower }}
+        </span>
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+            <div class="row">
+                <div class="col-6">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ client.displayName }}</h6>
+                </div>
+                 <div class="col-6 text-right">
+                    <span class="m-0 font-weight-bold text-primary">Client ID:</span> {{ client.id }}
+                </div>
+            </div>
+            </div>
+            <div class="card-body">
+                 <div class="col-md-12 col-12 pb-4 pl-3  ">
+                     {% if errorMessage %}
+                        <div class="col-md-12 col-12 pb-4 pl-3 pt-4 bg-warning text-white rounded">
+                            <ul>
+                                {% for em in errorMessage %}
+                                    <li>{{ em }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                     {% if message %}
+                         <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-info text-white rounded">
+                             <span>{{ message }}</span>
+                         </div>
+                     {% endif %}
+                 </div>
+                <div class="col-md-12 col-12  clientSection" id="documents">
+                    <div class="col-md-12 offset-md-1  col-12 border-1-coOrange p-4 rounded m-1">
+                        <h6 class="font-weight-bolder">Client Payment</h6>
+                        <a href="{{ path('client_account',{'guid':client.guid}) }}" class="">Return to Client</a>
+
+                        {{ form_start(paymentForm, {attr: { 'class':'form-horizontal' } } ) }}
+                            <div class="col-12 mt-5 mb-3">
+                                <div class="row pb1 ">
+                                    {{ form_label(paymentForm.paymentAmount) }}
+                                    <div class="col-md-3">
+                                        <span class="paymentAmount">{{ form_widget(paymentForm.paymentAmount) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% if unallocatedPayments %}
+                            <div class="col-12 mt-5 mb-3 bg-gradient-danger rounded pt-3 pb-3 pl-5">
+                                <div class="row pb1 ">
+                                    <span class="text-white font-weight-bold">There is currently an unallocated payment of £ {{ unallocatedPayments|number_format(2, '.', ',') }}. <a href="{{ path('client_payment_allocation',{'guid':client.guid}) }}" class="btn btn-sm btn-primary">Allocate</a></span>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                            <div class="paymentAllocationDiv">
+                                <div class="row bg-black coOrange pt-2 pb-2 mb-3 rounded-top font-weight-bold ">
+                                    <div class="col-md-2  ">
+                                        <span class="strong">Invoice Date</span>
+                                    </div>
+                                    <div class="col-md-2  ">
+                                        <span class="strong">Invoice Amount</span>
+                                    </div>
+                                    <div class="col-md-2  ">
+                                        <span class="strong">Already Paid</span>
+                                    </div>
+                                    <div class="col-md-2  ">
+                                        <span class="strong">Amount Outstanding</span>
+                                    </div>
+                                    <div class="col-md-2  ">
+                                        <span class="strong">Full Payment</span>
+                                    </div>
+                                    <div class="col-md-2  ">
+                                        <span class="strong">Part Payment</span>
+                                    </div>
+                                </div>
+                                {% for oi in outstandingInvoices  %}
+                                    <div class="row pt-2">
+                                        <div class="col-md-2">
+                                            <span class="pl-4"> <input class='form-check-input' type="checkbox" id="payInvoice{{ oi.id }}" name="payInvoice{{ oi.id }}" value="{{ oi.id }}"/></span>
+                                            {{ oi.dateCreated|date('d/m/Y') }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            £ {{ oi.totalPayable|number_format(2, '.', ',')  }}
+                                        </div>
+                                        <div class="col-md-2 ">
+                                            £ {{ oi.paidAmount|number_format(2, '.', ',') }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {% set ttlPayable = oi.totalPayable|number_format(2, '.', ',')  %}
+                                            {% set amountPaid =  oi.paidAmount|number_format(2, '.', ',')  %}
+                                            {% set aOs = ttlPayable %}
+                                            {% if amountPaid > 0 %}
+                                                {% set aOs = ttlPayable - amountPaid %}
+                                            {% endif %}
+
+                                            £ <span class="amountOutstanding{{ oi.id }}" >{{ aOs }}</span>
+                                        </div>
+                                        <div class="col-md-2">
+                                           <span class="pl-4"> <input class='form-check-input fullPayment'  data-id="{{ oi.id }}" type="checkbox" id="invoiceInFull{{ oi.id }}" name="" value=""/></span>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="input-group mb-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">£</div>
+                                                </div>
+                                                <input class="form-control invPartPay partPayment{{ oi.id }}" type="text" data-id="{{ oi.id }}"  id="invoiceAmount{{ oi.id }}" name="invoiceAmount{{ oi.id }}" value=""/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                {% endfor %}
+                                <div class="row ">
+                                    <div class="col-md-1 ">
+                                        {{ form_widget(paymentForm.submit) }}
+                                    </div>
+                                </div>
+                            </div>
+                        {{ form_end(paymentForm, {'render_rest': false}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block pageJavascripts %}
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
+    <script>
+        $(".fullPayment").change(function(){
+            let id = $(this).data('id');
+            let checkBox = document.getElementById("invoiceInFull"+id);
+            let amountOs = parseFloat($('.amountOutstanding'+id).html());
+            if (checkBox.checked == true){
+                $('.partPayment' + id).val(amountOs.toFixed(2));
+            } else {
+                $('.partPayment'+id).val('');
+                let amountOs = parseFloat($('.amountOutstanding'+id).html());
+            }
+        });
+
+        $('.invPartPay').change(function () {
+            let id = $(this).data('id');
+            let partPayment = parseFloat($('.partPayment'+id).val());
+            let amountOs = parseFloat($('.amountOutstanding'+id).html());
+            if (partPayment <= amountOs) {
+                $('.partPayment' + id).val(partPayment.toFixed(2));
+                if (partPayment == amountOs){
+                    document.getElementById("invoiceInFull"+id).checked = true;
+                }else{
+                    document.getElementById("invoiceInFull"+id).checked = false;
+                }
+            }
+        });
+
+
+    </script>
+
+{% endblock %}

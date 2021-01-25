@@ -1,0 +1,180 @@
+{% extends 'basePlain.html.twig' %}
+{% block body %}
+    <div style="width: 900px">
+        <div style="height: 80px">
+            <div class="col-sm-12 text-right mb-4 text-right">
+                <img class="invoiceLogo" src="{{ logoPath }}invoiceLogo.png" style="height: 70px; padding: 0px 0 10px 0" alt="" >
+            </div>
+        </div>
+        <div style="height: 50px">
+            <div class="pt-3 pb-3 bg-black text-center coOrange" style="width: 100%; height: 50px;line-height: 50px; ">
+                <span class="font-weight-bold">INVOICE</span>
+            </div>
+        </div>
+        <div class="pt-3 pb-3" style="height: 200px; margin:40px 0">
+            <table style="width: 100%">
+                <tr >
+                    <td class="width50pc"><span class="font-weight-bold">To:</span></td>
+                    <td class="width50pc"><span class="font-weight-bold">INVOICE NUMBER:   {{ invoice.id }}</span></td>
+                </tr>
+                <tr>
+                    <td class="width50pc"><span class="name">{% if client.company %} {{ client.company }} {% else %} {{ client.firstname }} {{ client.surname }} {% endif %}</span></td>
+                    <td class="width50pc"><span class="font-weight-bold">INVOICE DATE:  {{ invoice.dateCreated|date('jS F Y') }}</span></td>
+                </tr>
+                <tr>
+                    <td class="width50pc"><span class="addLine1">{{ client.addLine1 }}</span></td>
+                    <td class="width50pc"><span class="font-weight-bold">CLIENT NUMBER:  {{ client.id }}</span></td>
+                </tr>
+                <tr>
+                    <td class="width50pc"><span class="addLine2">{{ client.addLine2 }}</span></td>
+                    <td class="width50pc"><span class="font-weight-bold">PAYMENT TERMS:  {{ invoiceSettings.paymentTerms }} Days</span></td>
+                </tr>
+                <tr>
+                    <td class="width50pc"><span class="addLine3">{{ client.addLine3 }}</span></td>
+                    <td class="width50pc"><span class="font-weight-bold">PAYMENT DUE DATE:  {{ invoice.paymentTermsDate|date('jS F Y') }}</span></td>
+                </tr>
+                <tr>
+                    <td class="width50pc"><span class="addTown">{{ client.addTown }}</span></td>
+                    <td class="width50pc"></td>
+                </tr>
+                <tr>
+                    <td class="width50pc"><span class="addCounty">{{ client.addCounty }}</span></td>
+                    <td class="width50pc"></td>
+                </tr>
+                <tr>
+                    <td class="width50pc"><span class="addPostcode">{{ client.addPostcode }}</span></td>
+                    <td class="width50pc"></td>
+                </tr>
+            </table>
+        </div>
+
+
+
+        <div class="" style="height: 650px;">
+            <table class="" style="width: 900px">
+                <thead class="bg-black coOrange">
+                <tr style="width: 100%; height: 30px;line-height: 30px; ">
+                    <th class="pt-3 pb-3" style="width: 150px">Quantity/Days</th>
+                    <th class="pt-3 pb-3" style="width: 450px">Description</th>
+                    <th class="pt-3 pb-3" style="width: 150px">Unit Price</th>
+                    <th class="pt-3 pb-3" style="width: 150px">Amount</th>
+                </tr>
+                </thead>
+                <tbody class="font08">
+                <tr  class="invTableTr" >
+                    <td class="tdBorder" style="width: 150px">{{ invoice.days }}</td>
+                    <td class="tdBorder" style="width: 450px">{{ invoice.description }}</td>
+                    <td class="tdBorder text-right" style="width: 150px">£ {{ invoice.dayRate|number_format(2, '.', ',') }}</td>
+                    <td class="tdBorder text-right" style="width: 150px">£ {{ invoice.amount|number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr  class="invTableTr" >
+                    <td class="tdBorder" style="width: 150px">{{ invoice.days2 }}</td>
+                    <td class="tdBorder" style="width: 450px">{{ invoice.description2 }}</td>
+                    <td class="tdBorder text-right" style="width: 150px">{% if  invoice.dayRate2 > 0.00 %} £ {{ invoice.dayRate2|number_format(2, '.', ',') }} {% endif %}  </td>
+                    <td class="tdBorder text-right" style="width: 150px">{% if  invoice.amount2 > 0.00 %} £ {{ invoice.amount2|number_format(2, '.', ',') }} {% endif %}</td>
+                </tr>
+                <tr  class="invTableTr" >
+                    <td class="tdBorder" style="width: 150px">{{ invoice.days3 }}</td>
+                    <td class="tdBorder" style="width: 450px">{{ invoice.description3 }}</td>
+                    <td class="tdBorder text-right" style="width: 150px">{% if  invoice.dayRate3 > 0.00 %} £ {{ invoice.dayRate3|number_format(2, '.', ',') }} {% endif %}</td>
+                    <td class="tdBorder text-right" style="width: 150px">{% if  invoice.amount3 > 0.00 %} £ {{ invoice.amount3|number_format(2, '.', ',') }} {% endif %}</td>
+                </tr>
+                <tr  class="invTableTr" >
+                    <td class="tdBorder" style="width: 150px">{{ invoice.days4 }}</td>
+                    <td class="tdBorder" style="width: 450px">{{ invoice.description4 }}</td>
+                    <td class="tdBorder text-right" style="width: 150px">{% if  invoice.dayRate4 > 0.00 %} £ {{ invoice.dayRate4|number_format(2, '.', ',') }} {% endif %}</td>
+                    <td class="tdBorder text-right" style="width: 150px">{% if  invoice.amount4 > 0.00 %} £ {{ invoice.amount4|number_format(2, '.', ',') }} {% endif %}</td>
+                </tr>
+                <tr  class="invTableTr" >
+                    <td class="tdBorder" style="width: 150px">{{ invoice.days5 }}</td>
+                    <td class="tdBorder" style="width: 450px">{{ invoice.description5 }}</td>
+                    <td class="tdBorder text-right" style="width: 150px">{% if  invoice.dayRate5 > 0.00 %} £ {{ invoice.dayRate5|number_format(2, '.', ',') }} {% endif %}</td>
+                    <td class="tdBorder text-right" style="width: 150px">{% if  invoice.amount5 > 0.00 %} £ {{ invoice.amount5|number_format(2, '.', ',') }} {% endif %}</td>
+                </tr>
+                <tr  class="invTableTr" >
+                    <td class="tdBorder"></td>
+                    <td class="tdBorder"></td>
+                    <td class="tdBorder text-right"></td>
+                    <td class="tdBorder text-right"></td>
+                </tr>
+                <tr  class="invTableTr" >
+                    <td class="tdBorder"></td>
+                    <td class="tdBorder"></td>
+                    <td class="tdBorder text-right"></td>
+                    <td class="tdBorder text-right"></td>
+                </tr>
+                <tr  class="invTableTr" >
+                    <td class="tdBorder"></td>
+                    <td class="tdBorder"></td>
+                    <td class="tdBorder text-right"></td>
+                    <td class="tdBorder text-right"></td>
+                </tr>
+                <tr  class="invTableTr" >
+                    <td class="tdBorder"></td>
+                    <td class="tdBorder"></td>
+                    <td class="tdBorder text-right"></td>
+                    <td class="tdBorder text-right"></td>
+                </tr>
+                <tr  class="invTableTr" >
+                    <td class="tdBorder"></td>
+                    <td class="tdBorder"></td>
+                    <td class="tdBorder text-right"></td>
+                    <td class="tdBorder text-right"></td>
+                </tr>
+
+                <tr  class="invTableTr" >
+                    <td colspan="2"></td>
+                    <td class="tdBorder">Discount</td>
+                    <td class="tdBorder text-right">{% if  invoice.discount > 0.00 %} £ {{ invoice.discount|number_format(2, '.', ',') }} {% endif %}</td>
+                </tr>
+                <tr  class="invTableTr" >
+                    <td colspan="2"></td>
+                    <td class="tdBorder">Sub Total</td>
+                    <td class="tdBorder text-right">£ {{ invoice.subTotal|number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr  class="invTableTr" >
+                    <td colspan="2"></td>
+                    <td class="tdBorder">VAT</td>
+                    <td class="tdBorder text-right">£ {{ invoice.vatAmount|number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr  class="invTableTr" >
+                    <td colspan="2"></td>
+                    <td class="tdBorder">TOTAL PAYABLE</td>
+                    <td class="tdBorder text-right">£ {{ invoice.totalPayable|number_format(2, '.', ',') }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+
+        <div class="" style="height: 200px; margin:20px 0 0 0">
+            <table class="width100pc">
+                <tr>
+                    <td class="width70pc"><span class="font-weight-bold">DIRECT ALL ENQUIRES TO:</span><br />
+                        <span class="">{{ companyDetails.coName }}</span><br />
+                        <span class="">{{ invoiceSettings.addLine1 }}</span><br />
+                        {% if invoiceSettings.addLine2 %}<span class="">{{ invoiceSettings.addLine2 }}</span><br />{% endif %}
+                        {% if invoiceSettings.addLine3 %}<span class="">{{ invoiceSettings.addLine3 }}</span><br />{% endif %}
+                        <span class="">{{ invoiceSettings.addTown }}</span><br />
+                        {% if invoiceSettings.addCounty %}<span class="">{{ invoiceSettings.addCounty }}</span><br />{% endif %}
+                        <span class="">{{ invoiceSettings.addPostcode }}</span><br />
+                        <span class="">&nbsp;</span><br />
+                        {% if invoiceSettings.contactNo %}<span class="">{{ invoiceSettings.contactNo }}</span><br />{% endif %}
+                        {% if invoiceSettings.mobileNo %}<span class="">{{ invoiceSettings.mobileNo }}</span><br />{% endif %}
+                        <span class="">{{ invoiceSettings.email }}</span>
+                    </td>
+                    <td class="width30pc">
+                        <span class="font-weight-bold">PAYMENT BY BACS::</span><br />
+                        <span class="">BANK: {{ invoiceSettings.bank }}</span><br />
+                        <span class="">Sort Code: {{ invoiceSettings.sortCode }}</span><br />
+                        <span class="">Account No': {{ invoiceSettings.bankAccount }}<br />
+                        <span class="">&nbsp;</span><br />
+                        <span class="">Company No': {{ companyDetails.coNumber }}</span>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+{% endblock %}

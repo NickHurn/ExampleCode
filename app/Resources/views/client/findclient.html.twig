@@ -1,0 +1,52 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+
+        <span class="font08 font-italic">Users / <a href="{{ path('find_users') }}">{{ title|lower }}</a></span>
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Clients</h6>
+            </div>
+            <div class="card-body">
+                <div class="col-12 pt-1 pb-3"><a href="{{ path('new_client_details') }}"><span class="fa fa-plus-square text-primary"></span> Add new client</a></div>
+                <div class="col-12 pt-1 pb-3">
+                    {{ form_start(form, {attr: { 'class':'form-horizontal' } } ) }}
+                        <div class="row pb1 ">
+                            {{ form_label(form.searchTerm) }}
+                            <div class="col-md-7">
+                                {{ form_widget(form.searchTerm) }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form_row(form.search) }}
+                            </div>
+                        </div>
+                    {{ form_end(form, {'render_rest': false}) }}
+                </div>
+
+                <hr>
+
+                <div class="row pt-1 pb-3">
+                    {% for client in result %}
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-4 ">
+                            <a href="{{ path('client',{'guid':client.guid}) }}">
+                                <div class="col-10 offset-1 bg bg-primary rounded pt-4 pb-4 findClientsDiv">
+                                    <p><strong>{{ client.displayName }} </strong></p>
+                                    <p>{{ client.addLine1 }}</p>
+                                    <p>{{ client.addTown }}</p>
+                                    <p>{{ client.addPostcode }}</p>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block pageJavascripts %}
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
+{% endblock %}
+
+

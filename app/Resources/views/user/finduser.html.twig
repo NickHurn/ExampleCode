@@ -1,0 +1,51 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <span class="font08 font-italic">Users / <a href="{{ path('find_users') }}">{{ title|lower }}</a></span>
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Users</h6>
+            </div>
+            <div class="card-body">
+                <div class="col-12 pt-1 pb-3"><a href="{{ path('new_user_details') }}"><span class="fa fa-plus-square text-primary"></span> Add new user</a></div>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Surname</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Client</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in users %}
+                                <tr>
+                                    <td>{{ u.firstname }}</td>
+                                    <td>{{ u.surname }}</td>
+                                    <td>{{ u.username }}</td>
+                                    <td>{% for r in u.roles  %}
+                                            {{ r }}
+                                        {% endfor %}
+
+                                       </td>
+                                    <td>{% if u.client %}{% if u.client.company %}{{ u.client.company }}{% else %}{{ u.client.firstname }} {{ u.client.surname }}{% endif %}{% endif %}</td>
+                                    <td><a href="{{ path('user',{'guid':u.guid}) }}">View</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block pageJavascripts %}
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
+{% endblock %}
+
+

@@ -1,0 +1,270 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <span class="font08 font-italic">admin / {{ title|lower }}</span>
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+                <div class="row">
+                    <div class="col-12">
+                        <h6 class="m-0 font-weight-bold text-primary">{{ title }}</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                 <div class="col-md-12 col-12 pb-4 pl-3  ">
+                     {% if errorMessage %}
+                        <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-gradient-danger text-white rounded">
+                            <ul>
+                                {% for em in errorMessage %}
+                                    <li>{{ em }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                     {% if message %}
+                         <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-gradient-info text-white rounded">
+                             <span>{{ message }}</span>
+                         </div>
+                     {% endif %}
+                 </div>
+                <!-- BODY DETAILS -->
+                <div class="col-md-12 col-12 clientSection" id="details">
+                    {{ form_start(invoiceForm, {attr: { 'class':'form-inline' } } ) }}
+                            {{ form_widget(invoiceForm.id) }}
+                        <div class="col-12 border-1-coOrange rounded">
+                            <div class="row">
+                                <div class="col-12 pt-3 pb-3">
+                                    <h4 class="coOrange">Invoice Logo</h4>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1 mt-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.invoiceLogo) }}
+                                </div>
+                                <div class="input-group col-xl-5 col-lg-6 col-md-8 col-sm-12 col-12   mb-2">
+                                    {{ form_widget(invoiceForm.invoiceLogo, {'value':invoiceSettings.invoiceLogo}) }}
+                                    <div class="input-group-append">
+                                        <div class="input-group-text"><span class=" ml-2 fa fa-info-circle fa-1x coOrange" data-toggle="tooltip" data-placement="right" title="JPEG, JPG or PNG images are allowed upto a maximum size of 2MB."></span></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <img src="{{ asset('images/'~invoiceSettings.invoiceLogo)}}" alt="invoice logo" style="width: 20%">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 border-1-coOrange rounded mt-2">
+                            <div class="row">
+                                <div class="col-12 pt-3 pb-3">
+                                    <h4 class="coOrange">Accounts Contact Details</h4>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.addLine1) }}
+                                </div>
+                                <div class="input-group col-xl-10 col-lg-9 col-md-8 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.addLine1) }}
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.addLine1) }}</span>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.addLine2) }}
+                                </div>
+                                <div class="input-group col-xl-10 col-lg-9 col-md-8 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.addLine2) }}
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.addLine2) }}</span>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.addLine3) }}
+                                </div>
+                                <div class="input-group col-xl-10 col-lg-9 col-md-8 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.addLine3) }}
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.addLine3) }}</span>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.addTown) }}
+                                </div>
+                                <div class="input-group col-xl-10 col-lg-9 col-md-8 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.addTown) }}
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.addTown) }}</span>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.addCounty) }}
+                                </div>
+                                <div class="input-group col-xl-10 col-lg-9 col-md-8 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.addCounty) }}
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.addCounty) }}</span>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.addPostcode) }}
+                                </div>
+                                <div class="input-group col-xl-10 col-lg-9 col-md-8 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.addPostcode) }}
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.addPostcode) }}</span>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.email) }}
+                                </div>
+                                <div class="input-group col-xl-10 col-lg-9 col-md-8 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.email) }}
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.email) }}</span>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.contactNo) }}
+                                </div>
+                                <div class="input-group col-xl-4 col-lg-5 col-md-8 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.contactNo) }}
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.contactNo) }}</span>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.mobileNo) }}
+                                </div>
+                                <div class="input-group col-xl-4 col-lg-5 col-md-8 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.mobileNo) }}
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.mobileNo) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 border-1-coOrange rounded mt-2">
+                            <div class="row">
+                                <div class="col-12 pt-3 pb-3">
+                                    <h4 class="coOrange">Bank Details</h4>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.bank) }}
+                                </div>
+                                <div class="input-group col-xl-10 col-lg-9 col-md-8 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.bank) }}
+                                    <div class="input-group-append">
+                                        <div class="input-group-text"><span class=" ml-2 fa fa-info-circle fa-1x coOrange" data-toggle="tooltip" data-placement="right" title="The name of your bank."></span></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.bank) }}</span>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.sortCode) }}
+                                </div>
+                                <div class="input-group col-xl-3 col-lg-4 col-md-5 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.sortCode) }}
+                                    <div class="input-group-append">
+                                        <div class="input-group-text"> <span class=" ml-2 fa fa-info-circle fa-1x coOrange" data-toggle="tooltip" data-placement="right" title="Bank Account sort code for client to make payments to."></span></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.sortCode) }}</span>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.bankAccount) }}
+                                </div>
+                                <div class="input-group col-xl-3 col-lg-4 col-md-5 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.bankAccount) }}
+                                    <div class="input-group-append">
+                                        <div class="input-group-text"> <span class=" ml-2 fa fa-info-circle fa-1x coOrange" data-toggle="tooltip" data-placement="right" title="Bank Account number for client to make payments to."></span></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.bankAccount) }}</span>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 border-1-coOrange rounded mt-2">
+                            <div class="row">
+                                <div class="col-12 pt-3 pb-3">
+                                    <h4 class="coOrange">Payment Details</h4>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.paymentTerms) }}
+                                </div>
+                                <div class="input-group col-xl-3 col-lg-4 col-md-5 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.paymentTerms) }}
+                                    <div class="input-group-append">
+                                        <div class="input-group-text"><span class=" ml-2 fa fa-info-circle fa-1x coOrange" data-toggle="tooltip" data-placement="right" title="This is the number of days the client has to pay the invoice.  You can override this default when raising an invoice."></span></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.paymentTerms) }}</span>
+                                </div>
+                            </div>
+                            <div class="row pb-1 pb-1">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 inlineLabel">
+                                    {{ form_label(invoiceForm.vatRate) }}
+                                </div>
+                                <div class="input-group col-xl-3 col-lg-4 col-md-5 col-sm-12 col-12 mb-2">
+                                    {{ form_widget(invoiceForm.vatRate) }}
+                                    <div class="input-group-append">
+                                        <div class="input-group-text"><span class=" ml-2 fa fa-info-circle fa-1x coOrange" data-toggle="tooltip" data-placement="right" title="The VAT rate % to be applied to invoices."></span></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <span class="text-danger">{{ form_errors(invoiceForm.vatRate) }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row pt-5">
+                            <div class="col-md-4 ">
+                                {{ form_row(invoiceForm.submit) }}
+                            </div>
+                        </div>
+                    {{ form_end(invoiceForm, {'render_rest': false}) }}
+                </div>
+                <!-- END OF COMPANY DETAILS -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block pageJavascripts %}
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+{% endblock %}

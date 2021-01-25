@@ -1,0 +1,74 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <h1 class="h3 mb-2 text-gray-800 ">{{ title }}</h1>
+        <span>Users / <a href="{{ path('find_clients') }}">Find Clients</a> / {% if client.company %}{{ client.company }} {% else %} {{ client.firstname }} {{ client.surname }} {% endif %}</span>
+        <div class="card shadow mb-4 mt-5">
+            <div class="card-header py-3">
+            <div class="row">
+                <div class="col-6">
+                    <h6 class="m-0 font-weight-bold text-primary">{% if client.company %}{{ client.company }} {% else %} {{ client.firstname }} {{ client.surname }} {% endif %}</h6>
+                </div>
+                 <div class="col-6 text-right">
+                    <span class="m-0 font-weight-bold text-primary">Client ID:</span> {{ client.id }}
+                </div>
+
+            </div>
+            </div>
+            <div class="card-body">
+                <div class="col-md-12 col-12 pb-4 pl-3">
+                    {% block clientSubMenu %}
+                        {% include 'client/clientSubMenu.html.twig' %}
+                    {% endblock %}
+                </div>
+                 <div class="col-md-12 col-12 pb-4 pl-3  ">
+                     {% if errorMessage %}
+                        <div class="col-md-12 col-12 pb-4 pl-3 pt-4 bg-warning text-white rounded">
+                            <ul>
+                                {% for em in errorMessage %}
+                                    <li>{{ em }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                     {% if message %}
+                         <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-info text-white rounded">
+                             <span>{{ message }}</span>
+                         </div>
+                     {% endif %}
+                 </div>
+
+
+                <!-- SERVICES -->
+                <div class="col-md-12 col-12  clientSection" id="services">
+                    <div class="col-md-12 offset-md-1  col-12 border-1-coOrange p-4 rounded m-1">
+                        <h6 class="font-weight-bolder">Services</h6>
+                        <ul>
+                            <li>development
+                                <ul>
+                                    <li>Website
+                                        <ul>
+                                            <li>Domain Management</li>
+                                            <li>SSL</li>
+                                            <li>Hosting</li>
+                                        </ul>
+                                    </li>
+                                    <li>intranet</li>
+                                    <li>Bespoke Solutions</li>
+                                </ul>
+                            </li>
+                            <li>Business Analysis</li>
+                            <li>Consultations</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- END OF SERVICES -->
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block pageJavascripts %}
+
+
+{% endblock %}

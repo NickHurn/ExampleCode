@@ -1,0 +1,217 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <div class="container-fluid pb-5">
+        <span class="font08 font-italic">accounts / {{ title|lower }}</span>
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+            <div class="row">
+                <div class="col-6">
+                    <h6 class="m-0 font-weight-bold text-primary">All Clients Accounts</h6>
+                </div>
+                 <div class="col-6 text-right">
+                </div>
+            </div>
+            </div>
+            <div class="card-body">
+                 <div class="col-md-12 col-12  pl-3  ">
+                     {% if errorMessage %}
+                        <div class="col-md-12 col-12 pb-4 pl-3 pt-4 bg-warning text-white rounded">
+                            <ul>
+                                {% for em in errorMessage %}
+                                    <li>{{ em }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                     {% if message %}
+                         <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-info text-white rounded">
+                             <span>{{ message }}</span>
+                         </div>
+                     {% endif %}
+                 </div>
+                <div class="col-md-12 col-12" id="">
+                    <div class="col-md-12 offset-md-1  col-12 border-1-coOrange p-4 rounded m-1">
+                        <h5 class="font-weight-bolder">Overview</h5>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-12 pl-0"><strong>Account Balance:</strong><span {% if accountBalance.balance < 0  %} class="text-danger" {% endif %}  >   £ {{ accountBalance.balance|number_format(2, '.', ',') }}</span></div>
+                                <div class="col-12 pl-0"><strong>Invoiced:</strong><span>   £ {{ accountBalance.dr|number_format(2, '.', ',') }}</span></div>
+                                <div class="col-12 pl-0"><strong>Paid:</strong><span>   £ {{ accountBalance.cr|number_format(2, '.', ',') }}</span></div>
+                                {% if unallocatedPaymentBalance > 0 %}<div class="col-12 pl-0 "><strong class="text-danger"  >Unallocated Payments:</strong><span>   £ {{ unallocatedPaymentBalance|number_format(2, '.', ',') }}</span> </div>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-12 mt-2 mb-2 accountOptionDiv" id="documents">
+                    <div class="col-md-12 offset-md-1  col-12 p-2 rounded m-1">
+                        <button class="border-1-coOrange rounded btn-md bg-white coOrange  mr-2 accountButton">Account</button>
+                        <button class="border-1-coOrange rounded btn-md bg-white coOrange  mr-2 invoiceButton">Invoices</button>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-12  invoicesDiv" id="">
+                    <div class="col-md-12 offset-md-1  col-12 border-1-coOrange p-4 rounded m-1">
+                        <h5 class="font-weight-bolder">Invoices</h5>
+                        <div class="">
+                            <div class="row bg-black coOrange font-weight-bolder pt-2 pb-2 rounded-top">
+                                <div class="col-sm-2 border-right border-white">
+                                   <span><strong>Invoice Number</strong></span>
+                                </div>
+                                <div class="col-sm-2 border-right border-white">
+                                    <span><strong>Client</strong></span>
+                                </div>
+                                <div class="col-sm-2 border-right border-white">
+                                    <span><strong>Invoice Date</strong></span>
+                                </div>
+                                <div class="col-sm-2 border-right border-white">
+                                    <span><strong>Amount</strong></span>
+                                </div>
+                                <div class="col-sm-2 border-right border-white">
+                                    <span><strong>Amount Paid</strong></span>
+                                </div>
+                                <div class="col-sm-2 border-right border-white">
+                                    <span><strong>Payment Due Date</strong></span>
+                                </div>
+                            </div>
+                            <div class="">
+                                <div id="accordion">
+                                    {% if invoices %}
+                                        {% for i in invoices %}
+                                            <div class="card">
+                                                <div {% if i.paid %} {#if has been paid#}
+                                                        class="card-header row pl-0 pr-0 pt-2 pb-2 bg-gradient-success text-white"
+                                                    {% elseif i.paid == 0 and i.paymentTermsDate|date('y-m-d') < currentDate|date('y-m-d') %} {#if has not been paid and payment date has passed#}
+                                                        class="card-header row pl-0 pr-0 pt-2 pb-2 text-white bg-gradient-danger "
+                                                    {% elseif i.paid == 0 and i.paymentTermsDate|date('y-m-d') > currentDate|date('y-m-d') %} {#if has not been paid and payment date has not passed#}
+                                                        class="card-header row pl-0 pr-0 pt-2 pb-2"
+                                                    {% elseif i.paid == 0 and i.paymentTermsDate|date('y-m-d') == currentDate|date('y-m-d') %} {#if has not been paid and payment is today#}
+                                                        class="card-header row pl-0 pr-0 pt-2 pb-2 text-white bg-gradient-warning "
+                                                    {% endif %}
+                                                    id="heading{{ i.id }}" data-toggle="collapse" data-target="#collapse{{ i.id }}" aria-expanded="true" aria-controls="collapse{{ i.id }}">
+                                                    <div class="col-sm-2  ">
+                                                        {{ i.id }}
+                                                    </div>
+                                                    <div class="col-sm-2 ">
+                                                        {% if i.client.company %}{{ i.client.company }} {% else %} {{ i.client.firstname }} {{ i.client.surname }} {% endif %}
+                                                    </div>
+                                                    <div class="col-sm-2 ">
+                                                        {{ i.dateCreated|date('jS F Y') }}
+                                                    </div>
+                                                    <div class="col-sm-2 ">
+                                                        £ {{ i.totalPayable|number_format(2, '.', ',') }}
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        £ {{ i.paidAmount|number_format(2, '.', ',') }}
+                                                    </div>
+                                                    <div class="col-sm-2 ">
+                                                        {{ i.paymentTermsDate|date('jS F Y') }}
+                                                    </div>
+                                                </div>
+                                                <div id="collapse{{ i.id }}" class="row collapse collapsed" aria-labelledby="heading{{ i.id }}" data-parent="#accordion">
+                                                    <div class="card-body  pl-2 pr-0 pt-2 pb-2 text-white bg-coGrey ">
+                                                        {% if i.clientPayments|length > 0 %}
+                                                            <div class="row bg-black coOrange font-weight-bolder pt-2 pb-2 rounded-top ml-4 mr-4">
+                                                                <div class="col-sm-2 border-right border-white">
+                                                                    <span><strong>Date Paid</strong></span>
+                                                                </div>
+                                                                <div class="col-sm-2 ">
+                                                                    <span><strong>Amount Paid</strong></span>
+                                                                </div>
+                                                            </div>
+                                                            {% for cp in i.clientPayments %}
+                                                                <div class="row pt-2 pb-2 rounded-top ml-4 mr-4">
+                                                                    <div class="col-sm-2 border-right border-white">
+                                                                        <span>{{ cp.dateCreated|date('d-m-y')}}</span>
+                                                                    </div>
+                                                                    <div class="col-sm-2 ">
+                                                                        <span>
+                                                                            £ {{ cp.amount|number_format(2, '.', ',') }}
+                                                                            {% if cp.invoice|length > 1 %}
+                                                                                - Part of payment of ${{ cp.payment.amount }} on the {{ cp.payment.dateCreated|date('d-m-y')}}
+                                                                            {% endif %}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            <div class="row pt-2 pb-2 rounded-top ml-4 mr-4">
+                                                                <div class="">
+                                                                    <p>No payments have been made yet</p>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-12  accountDiv" id="">
+                    <div class="col-md-12 offset-md-1  col-12 border-1-coOrange p-4 rounded m-1">
+                        <h5 class="font-weight-bolder">Account</h5>
+                        <table class="table table-bordered" id="dataTable"  cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Client</th>
+                                <th>Type</th>
+                                <th>&nbsp;</th>
+                                <th>Debit</th>
+                                <th>Credit</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for acc in accountOverview %}
+                                    {% if acc.payment %}
+                                        {% for cp in acc.payment.clientPayments %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    <tr>
+                                        <td>{{ acc.dateCreated|date('d-m-y') }}</td>
+                                        <td><a href="{{ path('client_account',{'guid':acc.client.guid}) }}"> {% if acc.client.company %}{{ acc.client.company }} {% else %} {{ acc.client.firstname }} {{ acc.client.surname }} {% endif %}</a></td>
+                                        <td>{{ acc.accountType }}</td>
+                                        <td>
+                                            {% if acc.dr %}
+                                                {{ acc.accountType }}-{{ acc.invoice.id }}
+                                            {% endif %}
+                                            {% if acc.cr %}
+                                                {% if acc.payment %}
+                                                    {% for cp in acc.payment.clientPayments %}
+                                                        Invoice-{{ cp.invoice.id }},
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ acc.dr }}</td>
+                                        <td>{{ acc.cr }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block pageJavascripts %}
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
+    <script>
+        $('.accountButton').click(function () {
+            $('.invoicesDiv').hide();
+            $('.accountDiv').slideDown();
+        });
+        $('.invoiceButton').click(function () {
+            $('.accountDiv').hide();
+            $('.invoicesDiv').slideDown();
+        });
+    </script>
+
+{% endblock %}

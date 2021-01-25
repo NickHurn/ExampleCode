@@ -1,0 +1,68 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <div class="container-fluid pb-5">
+        <span class="font08 font-italic">accounts / {{ title|lower }}</span>
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+            <div class="row">
+                <div class="col-6">
+                    <h6 class="m-0 font-weight-bold text-primary">All Clients Accounts</h6>
+                </div>
+                 <div class="col-6 text-right">
+                </div>
+            </div>
+            </div>
+            <div class="card-body">
+
+                 <div class="col-md-12 col-12 pb-4 pl-3  ">
+                     {% if errorMessage %}
+                        <div class="col-md-12 col-12 pb-4 pl-3 pt-4 bg-warning text-white rounded">
+                            <ul>
+                                {% for em in errorMessage %}
+                                    <li>{{ em }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                     {% if message %}
+                         <div class="col-md-12 col-12 pb-2 pl-3 pt-2 bg-info text-white rounded">
+                             <span>{{ message }}</span>
+                         </div>
+                     {% endif %}
+                 </div>
+                <div class="col-md-6 offset-md-3 col-12" id="">
+                    <div class="col-md-12 offset-md-1  col-12 border-1-coOrange p-4 rounded m-1">
+                        <h5 class="font-weight-bolder">Find Client</h5>
+
+                        {{ form_start(form, {attr: { 'class':'form-horizontal' } } ) }}
+
+
+                            <div class="col-12">
+                                <div class="row pb1 ">
+                                    {{ form_label(form.client) }}
+                                    <div class="col-md-auto">
+                                        {{ form_widget(form.client) }}
+                                    </div>
+                                </div>
+                                <div class="row pb1 pt1 mt-4">
+                                    <div class="col-md-12 textAlignLeft">
+                                        {{ form_row(form.submit) }}
+                                    </div>
+                                </div>
+                            </div>
+                        {{ form_end(form, {'render_rest': false}) }}
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block pageJavascripts %}
+
+    <script>
+
+    </script>
+
+{% endblock %}
